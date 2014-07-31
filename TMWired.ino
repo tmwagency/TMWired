@@ -2,6 +2,8 @@
 #define VIBPIN          7
 #define FLASHLEDPIN     5
 #define CONTACTPIN      11
+#define STARTPIN        4
+#define COMPLETEPIN     9
 
 
 bool contact = false;
