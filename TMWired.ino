@@ -7,39 +7,54 @@
 
 
 bool contact = false;
+bool complete = false;
+bool startPosition = false;
+
 long lastMillis = 0;
-bool gameOver = false;
+bool gameOver = true;
 long flashLedDelay = 1000;
 int ledState = 0;
 
 
-// the setup routine runs once when you press reset:
+
 void setup() {                
-  // initialize the digital pin as an output.
+
   pinMode(KLAXPIN, OUTPUT);
   pinMode(FLASHLEDPIN, OUTPUT);
-  pinMode(CONTACTPIN, INPUT);
   pinMode(VIBPIN, OUTPUT);
-  digitalWrite(CONTACTPIN, HIGH);
 
+  pinMode(STARTPIN, INPUT);
+  pinMode(COMPLETEPIN, INPUT);
+  pinMode(CONTACTPIN, INPUT);
+
+  digitalWrite(CONTACTPIN, HIGH);
+  digitalWrite(STARTPIN, HIGH);
+  digitalWrite(COMPLETEPIN, HIGH);
   Serial.begin(9600);
 
-  resetGame();
 }
 
-// the loop routine runs over and over again forever:
+
 void loop() {
-  //check contact state
-  contact = digitalRead(CONTACTPIN);
-  //Serial.println(contact);
-  if (!contact && !gameOver) {
-    contactHappened();
+
+  if (!gameOver) {
+    
+    contact = digitalRead(CONTACTPIN);
+    complete = digitalRead(COMPLETEPIN);
+    
+    if (!contact) {
+      contactHappened();
+    }
+    if (!complete) {
+      gameComplete();
+    }
+    flashLed();
   }
-  flashLed();
+
 
   if (Serial.available() > 0) {
     int inByte = Serial.read();
-    // string logic here
+
     switch (inByte) {
 
     case '0':    
@@ -58,7 +73,7 @@ void loop() {
 
 
 void contactHappened() {
-  Serial.println("----> Contact!");
+  Serial.println("FAIL");
   digitalWrite(KLAXPIN, HIGH);
   digitalWrite(VIBPIN, HIGH);
   delay(1000);               // wait for a second
@@ -81,11 +96,34 @@ void flashLed() {
   }
 }
 
-void resetGame() {
-  contact = false;
-  gameOver = false;
-  Serial.println("----> Game Reset");
+void gameComplete() {
+
+  Serial.println("COMPLETE");
+  gameOver = true;
 }
+
+void resetGame() {
+
+  startPosition = digitalRead(STARTPIN);
+
+  if (!startPosition) {
+    contact = true;
+    complete = true;
+    gameOver = false;
+    Serial.println("READY");
+  }
+  else {
+    Serial.println("NOTREADY");
+  }
+
+
+}
+
+
+
+
+
+
 
 
 
