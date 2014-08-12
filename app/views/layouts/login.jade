@@ -1,0 +1,22 @@
+doctype html
+html
+	include ../includes/head
+
+	block vars
+
+	- if (subText === undefined)
+		- subText = 'Oops'
+
+	body
+		div(class="l-container")
+			include ../includes/header
+
+			.page-content
+				form.form--login
+					label Enter Your Twitter username:
+						input(class='control--username' name='username')
+					input.btn.control--submit(type="submit")
+
+			include ../includes/footer
+
+	include ../includes/foot

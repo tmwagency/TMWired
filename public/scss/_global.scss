@@ -1,0 +1,55 @@
+/**
+ * Global app/site styles
+ */
+body {
+	background-color: $color-bg;
+}
+
+/**
+ * Default layout container
+ */
+.l-container {
+	padding-left: #{$layout-margin}px;
+	padding-right: #{$layout-margin}px;
+	width: 95%;
+	max-width: #{$grid-max-width}px;
+	margin: 0 auto;
+
+	.lt-ie9 & {
+		min-width: #{$grid-min-width}px;
+	}
+}
+
+.page-header-title {
+	margin-top: 20px;
+	padding: 20px;
+	text-align: center;
+
+	background-color: #333;
+	color: #fff;
+}
+
+.page-footer {
+	position: fixed;
+	width: 100%;
+	padding: 10px 10%;
+	background: #2c3e50;
+	bottom: 0;
+	left: 0;
+}
+	.page-footer-links {
+		> li {
+			display: inline-block;
+
+			&:first-child a {
+				border-left: none;
+				padding-left: 0;
+			}
+		}
+		a {
+			color: #fff;
+			border-left: 1px solid #fff;
+			padding: 0 10px;
+		}
+	}
+
