@@ -11,8 +11,13 @@ module.exports = function (grunt) {
 	];
 	var distDir = 'public/js/dist/';
 	var jsFile = 'script.min.js';
+
+	var cssFile = 'kickoff';
 	// ====================
 	// ====================
+
+	// Load some stuff
+	require('load-grunt-tasks')(grunt);
 
 	// Project configuration.
 	grunt.initConfig({
@@ -25,28 +30,67 @@ module.exports = function (grunt) {
 			}
 		},
 
-		// Choose Sass files below
+		/**
+		 * Sass compilation using grunt-sass
+		 * https://github.com/gruntjs/grunt-contrib-sass
+		 * Includes kickoff.scss and kickoff-old-ie.scss by default
+		 * Also creates source maps
+		 */
 		sass: {
-			dev: {
+			kickoff: {
 				options: {
 					unixNewlines: true,
 					style: 'expanded',
 					lineNumbers: false,
 					debugInfo : false,
 					precision : 8,
-					sourcemap : true
+					sourcemap: true
 				},
 				files: {
-					'public/css/kickoff.css': 'public/scss/kickoff.scss'
+					'public/css/temp/kickoff.css'       : 'public/scss/kickoff.scss',
+					'public/css/temp/kickoff-old-ie.css': 'public/scss/kickoff-old-ie.scss'
 				}
+			}
+		},
+
+
+		/**
+		 * Autoprefixer
+		 * https://github.com/nDmitry/grunt-autoprefixer
+		 * https://github.com/ai/autoprefixer
+		 * Auto prefixes your CSS using caniuse data
+		 */
+		autoprefixer: {
+			options: {
+				// We are supporting the last 2 browsers, any browsers with >1% market share,
+				// and ensuring we support IE8+ with prefixes
+				browsers: ['> 5%', 'last 4 versions', 'firefox > 3.6', 'ie > 7'],
+				map: true
 			},
-			deploy: {
+
+			kickoff: {
+				expand: true,
+				flatten: true,
+				src: 'public/css/temp/*.css',
+				dest: 'public/css/'
+			}
+		},
+
+
+		/**
+		 * CSSO
+		 * https://github.com/t32k/grunt-csso
+		 * Minify CSS files with CSSO
+		 */
+		csso: {
+			dist: {
 				options: {
-					style: 'compressed'
+					restructure: false //turns structural optimisations off as can mess up fallbacks http://bem.info/tools/optimizers/csso/description/
 				},
 				files: {
-					'public/css/kickoff.min.css': 'public/scss/kickoff.scss'
-				}
+					'public/css/kickoff.css'       : 'public/css/kickoff.css',
+					'public/css/kickoff-old-ie.css': 'public/css/kickoff-old-ie.css'
+				},
 
 			}
 		},
@@ -84,7 +128,10 @@ module.exports = function (grunt) {
 		watch: {
 			scss: {
 				files: ['public/scss/**/*.scss'],
-				tasks: 'sass:dev'
+				tasks: [
+					'sass:kickoff',
+					'autoprefixer:kickoff'
+				]
 			},
 
 			js: {
@@ -103,14 +150,6 @@ module.exports = function (grunt) {
 			}
 		}
 	});
-
-	// Load some stuff
-	grunt.loadNpmTasks('grunt-contrib-jshint');
-	grunt.loadNpmTasks('grunt-contrib-sass');
-	grunt.loadNpmTasks('grunt-contrib-copy');
-	grunt.loadNpmTasks('grunt-contrib-uglify');
-	grunt.loadNpmTasks('grunt-contrib-watch');
-	grunt.loadNpmTasks('grunt-devtools');
 
 	// =============
 	// === Tasks ===

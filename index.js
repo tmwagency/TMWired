@@ -4,6 +4,7 @@
 var express = require('express')	//express - application framework for node
  	, fs = require('fs')			//fs - filesystem libraru
 	, http = require('http')		//http - give me server
+	, https = require('https')		//https - give me secureserver
 	, _ = require('underscore')		//underscore - some extra JS sugar
 	, path = require('path');		//http://nodejs.org/docs/v0.4.9/api/path.html
 
@@ -30,6 +31,11 @@ var app = express();
 // express settings
 require('./core/express')(app, config);
 
+//SSL cert options
+var options = {
+  key: fs.readFileSync('key.pem'),
+  cert: fs.readFileSync('cert.pem')
+};
 
 //Create the HTTP server with the express app as an argument
 var server = http.createServer(app);
@@ -41,6 +47,8 @@ server.listen(app.get('port'), function(){
 server.on('close', function(socket) {
 	console.log('app.js: Server has closed');
 });
+
+//https.createServer(options, app).listen(443);
 
 
 var arduinoIO = require('./app/controllers/MsgController').init(app, server, config);

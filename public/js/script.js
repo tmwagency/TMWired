@@ -4,12 +4,26 @@ TMW.Wired = {
 	socket : null,
 	isConnected : false,
 
+	videoOutput : document.querySelector('video'),
+	videoWidth : 0,
+	videoHeight : 0,
+	canvas : document.querySelector('.photoWindow'),
+	ctx : null,
+	photo : document.querySelector('.photo'),
+
+	isAnimating : false,
+	animationDelay : 500,
+
+	queuedScreens : [],
+
 
 	init : function () {
 
 		this.makeSocketConnection();
 
 		this.initEvents();
+
+		this.initCamera();
 
 	},
 
@@ -28,12 +42,17 @@ TMW.Wired = {
 		//will receive this event from the server when a connection is made
 		TMW.Wired.socket.on('connectSuccess', TMW.Wired.connectedToServer);
 
+		TMW.Wired.socket.on('changeView', TMW.Wired.changeView);
+
+		TMW.Wired.socket.on('capture', TMW.Wired.captureScreenShot);
+
 	},
 
 
 	connectedToServer : function (state) {
 
 		log('script.js :: connectedToServer');
+
 
 		TMW.Wired.isConnected = true;
 
@@ -46,14 +65,164 @@ TMW.Wired = {
 
 	},
 
+	changeView : function (data) {
 
-	Events : {
-		onSomething : function () {
+		log('script.js :: changeView');
 
-			log('script.js :: event :: onSomething');
+		//if we’re animating something, then add our view change to a queue and recall in a second
+		if (TMW.Wired.isAnimating) {
+			log('script.js :: already animating something');
+
+			if (TMW.Wired.queuedScreen && data.view !== TMW.Wired.queuedScreen[TMW.Wired.queuedScreen.length]) {
+				log('script.js :: adding view ' + data.view + ' to animation queue');
+				TMW.Wired.queuedScreens = data.view;
+			}
+
+			setTimeout(function () {
+				TMW.Wired.changeView(data);
+			}, 1000);
+
+		} else {
+
+			switch (data.view) {
+				case 'loader':
+					$('.form--login').style.display = 'none';
+					$('.loading').classList.remove('isHidden');
+
+					TMW.Wired.isAnimating = true;
+
+					TMW.Wired.setAnimationTimer();
+
+					break;
+				case 'inPlay':
+					document.querySelector('.loading').classList.add('isHidden');
+
+					TMW.Wired.isAnimating = true;
+
+					TMW.Wired.setAnimationTimer(function () {
+						document.querySelector('video').classList.remove('isHidden');
+						TMW.Wired.setupPhotoDimensions();
+					});
+					break;
+			}
 
 		}
-	}
+
+
+	},
+
+	//captures whatever is on the camera at the time the function is called
+	captureScreenShot : function () {
+
+		TMW.Wired.ctx.drawImage(TMW.Wired.videoOutput, 0, 0, TMW.Wired.videoWidth, TMW.Wired.videoHeight);
+
+		var data = TMW.Wired.canvas.toDataURL('image/png');
+    	TMW.Wired.photo.setAttribute('src', data);
+
+	},
+
+	setAnimationTimer : function (cb) {
+
+		setTimeout(function () {
+			TMW.Wired.isAnimating = false;
+
+			if (typeof cb === 'function')
+				cb();
+
+		}, TMW.Wired.animationDelay);
+
+	},
+
+
+	hasGetUserMedia : function () {
+	  return !!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
+			navigator.mozGetUserMedia || navigator.msGetUserMedia);
+	},
+
+	initCamera : function () {
+
+		if (this.hasGetUserMedia()) {
+			// Good to go!
+			log('script.js :: Camera support detected – woop')
+			//cross browser bit to alias prefix back to actual call
+			navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+			this.findSources();
+
+		} else {
+			log('script.js :: getUserMedia Not Supported – boooooooo')
+		}
+
+	},
+
+	//uses MediaStreamTrack to get a list of available sources for the interface
+	findSources : function () {
+
+		if (typeof MediaStreamTrack === 'undefined') {
+			log('script.js :: This browser does not support MediaStreamTrack :(');
+		} else {
+			MediaStreamTrack.getSources(this.gotSources);
+		}
+
+	},
+
+	gotSources : function (sourceInfos) {
+
+		for (var i = 0; i != sourceInfos.length; ++i) {
+			var sourceInfo = sourceInfos[i];
+
+			//we only care about video sources, ignore the rest
+			if (sourceInfo.kind === 'video') {
+				//try and match our external webcam id
+				if (sourceInfo.id.match(/042794d4f654f33139f9687f87faf2305aa325c89149ec3571ec1f3fa27879b8/)) {
+				 	log('Matched External Camera Id');
+					TMW.Wired.startStream(sourceInfo.id);
+				}
+			}
+		}
+
+	},
+
+	startStream : function (videoSource) {
+
+		if (!!window.stream) {
+			MW.Wired.videoOutput.src = null;
+			window.stream.stop();
+		}
+
+		var constraints = {
+			video: {
+				optional: [{sourceId: videoSource}]
+			}
+		};
+
+		navigator.getUserMedia(constraints, this.cameraSuccessCallback, this.cameraErrorCallback);
+
+	},
+
+	cameraSuccessCallback : function (stream) {
+
+		window.stream = stream; //makes stream available to console
+		TMW.Wired.videoOutput.src = window.URL.createObjectURL(stream);
+  		TMW.Wired.videoOutput.play();
+
+	},
+
+	setupPhotoDimensions : function () {
+
+		TMW.Wired.videoWidth = TMW.Wired.videoOutput.videoWidth;
+  		TMW.Wired.videoHeight = TMW.Wired.videoOutput.videoHeight;
+
+  		TMW.Wired.canvas.setAttribute('width', TMW.Wired.videoWidth);
+  		TMW.Wired.canvas.setAttribute('height', TMW.Wired.videoHeight);
+
+  		TMW.Wired.ctx = TMW.Wired.canvas.getContext('2d');
+
+	},
+
+	cameraErrorCallback : function (e) {
+		log(e);
+	},
 
 };
 
@@ -247,6 +416,183 @@ Element.prototype.prependChild = function(child) { this.insertBefore(child, this
 
 			return $;
 		})(document);
+
+/*
+ * classList.js: Cross-browser full element.classList implementation.
+ * 2014-01-31
+ *
+ * By Eli Grey, http://eligrey.com
+ * Public Domain.
+ * NO WARRANTY EXPRESSED OR IMPLIED. USE AT YOUR OWN RISK.
+ */
+
+/*global self, document, DOMException */
+
+/*! @source http://purl.eligrey.com/github/classList.js/blob/master/classList.js*/
+
+if ("document" in self && !("classList" in document.createElement("_"))) {
+
+	(function (view) {
+
+		"use strict";
+
+		if (!('Element' in view)) return;
+
+		var
+			  classListProp = "classList"
+			, protoProp = "prototype"
+			, elemCtrProto = view.Element[protoProp]
+			, objCtr = Object
+			, strTrim = String[protoProp].trim || function () {
+				return this.replace(/^\s+|\s+$/g, "");
+			}
+			, arrIndexOf = Array[protoProp].indexOf || function (item) {
+				var
+					  i = 0
+					, len = this.length
+				;
+				for (; i < len; i++) {
+					if (i in this && this[i] === item) {
+						return i;
+					}
+				}
+				return -1;
+			}
+			// Vendors: please allow content code to instantiate DOMExceptions
+			, DOMEx = function (type, message) {
+				this.name = type;
+				this.code = DOMException[type];
+				this.message = message;
+			}
+			, checkTokenAndGetIndex = function (classList, token) {
+				if (token === "") {
+					throw new DOMEx(
+						  "SYNTAX_ERR"
+						, "An invalid or illegal string was specified"
+					);
+				}
+				if (/\s/.test(token)) {
+					throw new DOMEx(
+						  "INVALID_CHARACTER_ERR"
+						, "String contains an invalid character"
+					);
+				}
+				return arrIndexOf.call(classList, token);
+			}
+			, ClassList = function (elem) {
+				var
+					  trimmedClasses = strTrim.call(elem.getAttribute("class") || "")
+					, classes = trimmedClasses ? trimmedClasses.split(/\s+/) : []
+					, i = 0
+					, len = classes.length
+				;
+				for (; i < len; i++) {
+					this.push(classes[i]);
+				}
+				this._updateClassName = function () {
+					elem.setAttribute("class", this.toString());
+				};
+			}
+			, classListProto = ClassList[protoProp] = []
+			, classListGetter = function () {
+				return new ClassList(this);
+			}
+		;
+		// Most DOMException implementations don't allow calling DOMException's toString()
+		// on non-DOMExceptions. Error's toString() is sufficient here.
+		DOMEx[protoProp] = Error[protoProp];
+		classListProto.item = function (i) {
+			return this[i] || null;
+		};
+		classListProto.contains = function (token) {
+			token += "";
+			return checkTokenAndGetIndex(this, token) !== -1;
+		};
+		classListProto.add = function () {
+			var
+				  tokens = arguments
+				, i = 0
+				, l = tokens.length
+				, token
+				, updated = false
+			;
+			do {
+				token = tokens[i] + "";
+				if (checkTokenAndGetIndex(this, token) === -1) {
+					this.push(token);
+					updated = true;
+				}
+			}
+			while (++i < l);
+
+			if (updated) {
+				this._updateClassName();
+			}
+		};
+		classListProto.remove = function () {
+			var
+				  tokens = arguments
+				, i = 0
+				, l = tokens.length
+				, token
+				, updated = false
+			;
+			do {
+				token = tokens[i] + "";
+				var index = checkTokenAndGetIndex(this, token);
+				if (index !== -1) {
+					this.splice(index, 1);
+					updated = true;
+				}
+			}
+			while (++i < l);
+
+			if (updated) {
+				this._updateClassName();
+			}
+		};
+		classListProto.toggle = function (token, force) {
+			token += "";
+
+			var
+				  result = this.contains(token)
+				, method = result ?
+					force !== true && "remove"
+				:
+					force !== false && "add"
+			;
+
+			if (method) {
+				this[method](token);
+			}
+
+			return !result;
+		};
+		classListProto.toString = function () {
+			return this.join(" ");
+		};
+
+		if (objCtr.defineProperty) {
+			var classListPropDesc = {
+				get: classListGetter
+				, enumerable: true
+				, configurable: true
+			};
+			try {
+				objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+			} catch (ex) { // IE 8 doesn't support enumerable:true
+				if (ex.number === -0x7FF5EC54) {
+					classListPropDesc.enumerable = false;
+					objCtr.defineProperty(elemCtrProto, classListProp, classListPropDesc);
+				}
+			}
+		} else if (objCtr[protoProp].__defineGetter__) {
+			elemCtrProto.__defineGetter__(classListProp, classListGetter);
+		}
+
+	}(self));
+
+}
 
 
 

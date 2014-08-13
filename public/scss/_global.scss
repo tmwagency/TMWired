@@ -29,6 +29,10 @@ body {
 	color: #fff;
 }
 
+.page-content {
+	text-align: center;
+}
+
 .page-footer {
 	position: fixed;
 	width: 100%;
@@ -52,4 +56,71 @@ body {
 			padding: 0 10px;
 		}
 	}
+
+
+/**
+ * Loader animation
+ */
+
+$size: 0.5em;
+$color: #c22;
+
+.loading {
+	margin: 0 auto;
+	position: relative;
+	display: inline-block;
+	padding: $size;
+
+	vertical-align: middle;
+	text-align: center;
+	background-color: transparent;
+	border: 5px solid transparent;
+	border-top-color: $color;
+	border-bottom-color: $color;
+	border-radius: 50%;
+
+	animation: spin 1s infinite linear;
+
+	&:after {
+	  content: '';
+	  @extend .loading;
+	  animation: spinreverse 1s infinite linear;
+	}
+}
+
+.form--login,
+.loading,
+.cameraWindow,
+.photoWindow {
+	transition: opacity 500ms, margin-left 0 500ms;
+
+	&.isHidden {
+		opacity: 0;
+	//	margin-left: 100%;
+	}
+}
+.photoWindow {
+	display: none;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotateZ(0deg);
+  }
+  100% {
+    transform: rotateZ(360deg);
+  }
+}
+
+@keyframes spinreverse {
+  0% {
+    transform: rotateZ(360deg);
+  }
+  100% {
+    transform: rotateZ(-360deg);
+  }
+}
+
+
+
 

@@ -20,6 +20,8 @@ var express = require('express'),
 	io = require('socket.io'), //socket.io - used for our websocket connection
 	client = require('socket.io-client'),
 	socketServer = null,
+	timer = null,
+	uiState = null,
 
 	pkg = require('../../package.json');
 
@@ -42,7 +44,7 @@ var MsgController = {
 
 		} else if (to === 'ui') {
 
-			_self.ui.receiveMsg('')
+			_self.UI.receiveMsg(msg.toLowerCase())
 
 		}
 
@@ -94,7 +96,16 @@ var MsgController = {
 
 			switch (dataString) {
 				case 'NOTREADY':
-					//msgController.msg('ui', 'notready');
+					_self.sendMessage('ui', 'notready');
+					break;
+				case 'READY':
+					_self.sendMessage('ui', 'ready');
+					break;
+				case 'FAIL':
+					_self.sendMessage('ui', 'fail');
+					break;
+				case 'COMPLETE':
+					_self.sendMessage('ui', 'complete');
 					break;
 			}
 
@@ -119,7 +130,8 @@ var MsgController = {
 
 				_self.UI.initCustomEvents(socket);
 
-				socketServer.sockets.emit('connectSuccess');
+				uiState = 'connected';
+				_self.UI.emitMsg('connectSuccess');
 			});
 
 			//  ============================
@@ -138,21 +150,65 @@ var MsgController = {
 				console.log('ui : user is ready');
 
 				//see if the arduino is in a ready state
-				_self.UI.startGame();
+				_self.UI.sendStartSignal();
+
+				//ui is in a loading state while it waits for the arduino to respond that it is ready
+				uiState = 'loading';
 			});
+
+			socket.on('disconnect', function() {
+				console.log('ui : user has disconnected');
+
+				//clear timer if user disconnects
+				clearTimeout(timer);
+			});
+
+		},
+
+		emitMsg : function (msg, data) {
+
+			socketServer.sockets.emit(msg, data);
 
 		},
 
 		receiveMsg : function (msg) {
 
-			//console.log(msg);
+// //temp switcher so we can fake it always being ready)
+// if (msg === 'notready') {
+// 	msg = 'ready';
+// }
+
+			console.log('ui : message received : ' + msg);
+
+			//dependent on msg, fire different responses
+			switch (msg) {
+				case 'notready':
+					_self.UI.sendStartSignal(1000);
+					break;
+				case 'ready':
+					_self.UI.emitMsg('changeView', { view : 'inPlay' });
+					break;
+				case 'fail':
+				case 'complete':
+					_self.UI.emitMsg('capture');
+					break;
+			}
 
 		},
 
-		startGame : function () {
+		sendStartSignal : function (delay) {
+
+			delay = (delay !== null ? delay : 0);
 
 			//writes 0 to the server to see if its ready
-			_self.sendMessage('server', '0');
+			//waits x milliseconds if delay is set
+			timer = setTimeout(function () {
+				_self.sendMessage('server', '0');
+			}, delay);
+
+			if (uiState === 'connected') {
+				_self.UI.emitMsg('changeView', { view : 'loader' });
+			}
 
 		}
 	}

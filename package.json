@@ -23,12 +23,15 @@
   },
   "devDependencies": {
     "grunt": "*",
+    "grunt-autoprefixer": "~0.8.1",
     "grunt-contrib-copy": "*",
     "grunt-contrib-jshint": "*",
     "grunt-contrib-sass": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-watch": "*",
-    "grunt-devtools": "*"
+    "grunt-csso": "~0.6.2",
+    "grunt-devtools": "*",
+    "load-grunt-tasks": "~0.6.0"
   },
   "subdomain": "tmwired",
   "engines": {
