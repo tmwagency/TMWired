@@ -158,7 +158,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('dev', ['uglify', 'sass:dev']);
 
 	// A task for deployment
-	grunt.registerTask('deploy', ['uglify', 'sass:deploy']);
+	grunt.registerTask('deploy', ['uglify', 'sass:kickoff']);
 
 	// Default task
 	grunt.registerTask('default', ['uglify', 'sass:dev']);

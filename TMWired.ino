@@ -6,14 +6,18 @@
 #define COMPLETEPIN     9
 
 
-bool contact = false;
-bool complete = false;
-bool startPosition = false;
+boolean contact = false;
+boolean complete = false;
+boolean startPosition = false;
 
 long lastMillis = 0;
+long lastContactMillis = 50;
+int sens = 4; // reads
+long timeout = 100;
 bool gameOver = true;
 long flashLedDelay = 1000;
 int ledState = 0;
+int contactCount = 0;
 
 
 
@@ -38,10 +42,21 @@ void setup() {
 void loop() {
 
   if (!gameOver) {
+
+    boolean contactRead = digitalRead(CONTACTPIN);
+    if (!contactRead) {
+      contactCount++;
+      lastContactMillis = millis();
+      if (contactCount > 4) {
+        contact = false;
+      }
+      else if (millis() - lastContactMillis > timeout) {
+        contactCount = 0;
+      }
+    }
     
-    contact = digitalRead(CONTACTPIN);
-    complete = digitalRead(COMPLETEPIN);
-    
+    //complete = digitalRead(COMPLETEPIN);
+
     if (!contact) {
       contactHappened();
     }
@@ -66,7 +81,7 @@ void loop() {
       break;
     }
   }
-  delay(1);
+  delay(2);
 }
 
 
@@ -118,6 +133,7 @@ void resetGame() {
 
 
 }
+
 
 
 

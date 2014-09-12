@@ -161,22 +161,27 @@ TMW.Wired = {
 		if (typeof MediaStreamTrack === 'undefined') {
 			log('script.js :: This browser does not support MediaStreamTrack :(');
 		} else {
+			log('script.js :: MediaStreamTrack.getSources');
 			MediaStreamTrack.getSources(this.gotSources);
 		}
 
 	},
 
-	gotSources : function (sourceInfos) {
-
+	gotSources : function (sourceInfos) {		
+	
 		for (var i = 0; i != sourceInfos.length; ++i) {
 			var sourceInfo = sourceInfos[i];
-
+			
 			//we only care about video sources, ignore the rest
 			if (sourceInfo.kind === 'video') {
 				//try and match our external webcam id
-				if (sourceInfo.id.match(/042794d4f654f33139f9687f87faf2305aa325c89149ec3571ec1f3fa27879b8/)) {
+				log('script.js :: Trying to match external webcam ID...');
+				if (sourceInfo.id.match(/89e0d0c17efbd5c0525e4db7b6c67e6f557d4456a82da194ebda964d2de72a57/)) {
 				 	log('Matched External Camera Id');
 					TMW.Wired.startStream(sourceInfo.id);
+				}
+				else {
+				log('script.js :: Failed to match external webcam ID.');
 				}
 			}
 		}

@@ -55,7 +55,8 @@ var MsgController = {
 		setupConnection : function () {
 
 			//connect to the arduino through it’s path
-			sp = new SerialPort("/dev/tty.usbserial-A92HH373", {
+			//sp = new SerialPort("/dev/tty.usbserial-A92HH373", {
+			sp = new SerialPort("COM8", {
 				baudrate: 9600,
 	    		parser: require("serialport").parsers.readline('\r\n')
 			});
@@ -183,7 +184,7 @@ var MsgController = {
 			//dependent on msg, fire different responses
 			switch (msg) {
 				case 'notready':
-					_self.UI.sendStartSignal(1000);
+					_self.UI.sendStartSignal(500);
 					break;
 				case 'ready':
 					_self.UI.emitMsg('changeView', { view : 'inPlay' });
