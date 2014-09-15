@@ -280,8 +280,8 @@ h1 small, h2 small, h3 small, h4 small, h5 small, h6 small {
 }
 
 h1, .h1, .alpha {
-  font-size: 36px;
-  font-size: 1.8rem;
+  font-size: 40px;
+  font-size: 2rem;
   margin-top: 0;
   margin-bottom: 56px;
 }
@@ -627,7 +627,7 @@ samp {
   overflow: visible;
   /* [8] */
   text-align: center;
-  background-color: #95a5a6;
+  background-color: #2ecc71;
   border-radius: 5px;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -638,7 +638,7 @@ samp {
   color: #fff;
 }
 .btn:hover, .tabs a:hover, .btn:active, .tabs a:active, .btn:focus, .tabs a:focus {
-  background-color: #798d8f;
+  background-color: #25a25a;
 }
 .btn, .tabs a, .btn:hover, .tabs a:hover, .btn:active, .tabs a:active, .btn:focus, .tabs a:focus, .btn:visited, .tabs a:visited {
   text-decoration: none;
@@ -1949,8 +1949,7 @@ body {
 }
 
 .page-header-title {
-  margin-top: 20px;
-  padding: 20px;
+  padding: 40px;
   text-align: center;
   background-color: #333;
   color: #fff;
@@ -1964,7 +1963,7 @@ body {
   position: fixed;
   width: 100%;
   padding: 10px 10%;
-  background: #2c3e50;
+  background: #333;
   bottom: 0;
   left: 0;
 }
@@ -1980,6 +1979,21 @@ body {
   color: #fff;
   border-left: 1px solid #fff;
   padding: 0 10px;
+}
+
+/* ==========================================================================
+   Form inputs
+   ========================================================================== */
+.form--login {
+  width: 50%;
+  margin: 0 auto;
+  text-align: center;
+}
+
+.control--username {
+  display: block;
+  max-width: 400px;
+  margin: 20px auto;
 }
 
 /**

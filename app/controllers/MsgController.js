@@ -31,7 +31,8 @@ var MsgController = {
 	init : function (app, server, config) {
 
 		//setup our Arduino connection
-		_self.Arduino.setupConnection();
+		//commented out for testing purposes
+		//_self.Arduino.setupConnection();
 		_self.UI.setupConnection(app, server, config);
 
 	},
@@ -173,11 +174,6 @@ var MsgController = {
 		},
 
 		receiveMsg : function (msg) {
-
-// //temp switcher so we can fake it always being ready)
-// if (msg === 'notready') {
-// 	msg = 'ready';
-// }
 
 			console.log('ui : message received : ' + msg);
 

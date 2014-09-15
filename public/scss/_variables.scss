@@ -25,7 +25,7 @@ $leading-base                  : 1.4;
 $line-height-base              : round($font-size-base * $leading-base); // 20 * 1.4
 $line-height-base-px           : $line-height-base * 1px;
 
-$h1-size                       : 36 !default;
+$h1-size                       : 40 !default;
 $h2-size                       : 30 !default;
 $h3-size                       : 24 !default;
 $h4-size                       : 20 !default;

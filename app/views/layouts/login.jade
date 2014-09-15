@@ -8,13 +8,14 @@ html
 		- subText = 'Oops'
 
 	body
+		include ../includes/header
+
 		div(class="l-container")
-			include ../includes/header
 
 			.page-content
 				form.form--login
 					label Enter Your Twitter username:
-						input(class='control--username' name='username')
+						input(class='form-input control--username' name='username')
 					input.btn.control--submit(type="submit")
 
 				.loading.isHidden
