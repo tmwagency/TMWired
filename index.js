@@ -48,11 +48,14 @@ server.on('close', function(socket) {
 	console.log('app.js: Server has closed');
 });
 
-//https.createServer(options, app).listen(443);
+//setup our socketServer Connection
+var socketController = require('./app/controllers/SocketController');
+socketController.setup(app, server, config);
 
 
-var arduinoIO = require('./app/controllers/MsgController').init(app, server, config);
-//var webController = require('./app/controllers/webController').init(app, server, config);
+var MsgController = require('./app/controllers/MsgController').init(app, server, socketController, config);
+var ApiController = require('./app/controllers/ApiController').init(app, server, socketController, config);
+
 
 // Bootstrap routes
 require('./core/routes')(app);
@@ -60,5 +63,3 @@ require('./core/routes')(app);
 
 // expose app as the scope
 exports = module.exports = app;
-
-

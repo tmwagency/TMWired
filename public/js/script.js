@@ -25,6 +25,8 @@ TMW.Wired = {
 
 		this.initCamera();
 
+		this.checkForUser();
+
 	},
 
 	makeSocketConnection : function () {
@@ -42,6 +44,8 @@ TMW.Wired = {
 		//will receive this event from the server when a connection is made
 		TMW.Wired.socket.on('connectSuccess', TMW.Wired.connectedToServer);
 
+		TMW.Wired.socket.on('userVerified', TMW.Wired.userVerified);
+
 		TMW.Wired.socket.on('changeView', TMW.Wired.changeView);
 
 		TMW.Wired.socket.on('capture', TMW.Wired.captureScreenShot);
@@ -58,12 +62,46 @@ TMW.Wired = {
 
 		//do some logging on stuff here
 		$('.form--login').on('submit', function (e) {
-			TMW.Wired.socket.emit('userLoggedIn');
+			var userDetails = {
+				username : $('.control--username').value
+			};
+
+			//redirect user to authenticate with twitter
+			window.location.href= 'https://twitter.com/oauth/authorize?oauth_token=' + $('#requestToken').value;
 
 			e.preventDefault();
-		})
+		});
 
 	},
+
+	userVerified : function () {
+		//simply here in case we want to do anything in between these states
+		//UI is informed of successful oauth from User
+		//
+		//respond that UI is now ready and to check if the Arduino is ready
+		TMW.Wired.socket.emit('userLoggedIn');
+	},
+
+
+	checkForUser : function () {
+
+		var oauth_token = this.getParameterByName('oauth_token'),
+			oauth_verifier = this.getParameterByName('oauth_verifier');
+
+		if (oauth_verifier.length > 0) {
+			console.log('script.js :: checkForUser');
+			TMW.Wired.socket.emit('API.getAccessToken', oauth_verifier);
+		}
+
+	},
+
+	getParameterByName : function (name) {
+		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+		var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		results = regex.exec(location.search);
+		return results == null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+	},
+
 
 	changeView : function (data) {
 
@@ -167,11 +205,11 @@ TMW.Wired = {
 
 	},
 
-	gotSources : function (sourceInfos) {		
-	
+	gotSources : function (sourceInfos) {
+
 		for (var i = 0; i != sourceInfos.length; ++i) {
 			var sourceInfo = sourceInfos[i];
-			
+
 			//we only care about video sources, ignore the rest
 			if (sourceInfo.kind === 'video') {
 				//try and match our external webcam id

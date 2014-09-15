@@ -4,11 +4,7 @@
  * and handles the db connection
  */
 
-var express = require('express'),
-	_ = require('underscore'),
-
-	msgController = require('./msgController'),
-
+var
 	//serialport stuff
 	com = require("serialport"),
 	SerialPort = com.SerialPort,
@@ -16,24 +12,25 @@ var express = require('express'),
 	isConnectionOpen = false,
 	buffer = '',
 
-	//socketio ui stuff
-	io = require('socket.io'), //socket.io - used for our websocket connection
-	client = require('socket.io-client'),
-	socketServer = null,
 	timer = null,
 	uiState = null,
+
+	SocketController = null,
 
 	pkg = require('../../package.json');
 
 
 var MsgController = {
 
-	init : function (app, server, config) {
+	init : function (app, server, socketController, config) {
+
+		SocketController = socketController;
 
 		//setup our Arduino connection
 		//commented out for testing purposes
 		//_self.Arduino.setupConnection();
-		_self.UI.setupConnection(app, server, config);
+
+		return _self;
 
 	},
 
@@ -114,35 +111,17 @@ var MsgController = {
 		}
 	},
 
+
+	//this handles all of our UI connections detected through our socketController
+	//newConnection gets called on every new connection and sets up events for that socket
 	UI : {
 
-		setupConnection : function (app, server, config) {
+		newConnection : function (socket) {
 
-			//Start a Socket.IO listen
-			socketServer = io.listen(server);
+			_self.UI.initCustomEvents(socket);
 
-			//  ==================
-			//  === ON CONNECT ===
-			//  ==================
-
-			//If a client connects, give them the current data that the server has tracked
-			//so here that would be how many tweets of each type we have stored
-			socketServer.sockets.on('connection', function(socket) {
-				console.log('ui : new connection logged');
-
-				_self.UI.initCustomEvents(socket);
-
-				uiState = 'connected';
-				_self.UI.emitMsg('connectSuccess');
-			});
-
-			//  ============================
-			//  === SERVER ERROR LOGGING ===
-			//  ============================
-
-			socketServer.sockets.on('close', function(socket) {
-				console.log('ui : socketServer has closed');
-			});
+			uiState = 'connected';
+			SocketController.emitMsg('connectSuccess');
 
 		},
 
@@ -167,12 +146,6 @@ var MsgController = {
 
 		},
 
-		emitMsg : function (msg, data) {
-
-			socketServer.sockets.emit(msg, data);
-
-		},
-
 		receiveMsg : function (msg) {
 
 			console.log('ui : message received : ' + msg);
@@ -183,11 +156,11 @@ var MsgController = {
 					_self.UI.sendStartSignal(500);
 					break;
 				case 'ready':
-					_self.UI.emitMsg('changeView', { view : 'inPlay' });
+					SocketController.emitMsg('changeView', { view : 'inPlay' });
 					break;
 				case 'fail':
 				case 'complete':
-					_self.UI.emitMsg('capture');
+					SocketController.emitMsg('capture');
 					break;
 			}
 
@@ -204,7 +177,7 @@ var MsgController = {
 			}, delay);
 
 			if (uiState === 'connected') {
-				_self.UI.emitMsg('changeView', { view : 'loader' });
+				SocketController.emitMsg('changeView', { view : 'loader' });
 			}
 
 		}
@@ -212,7 +185,6 @@ var MsgController = {
 }
 
 var _self = MsgController;
-
 
 module.exports = MsgController;
 

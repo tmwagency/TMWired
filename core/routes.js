@@ -3,8 +3,10 @@
  * Module dependencies.
  */
 
-var async = require('async')
-	, pkg = require('../package.json');
+var async = require('async'),
+
+	ApiController = require('../app/controllers/ApiController'),
+	pkg = require('../package.json');
 
 
 /**
@@ -15,7 +17,8 @@ module.exports = function (app) {
 
 	app.get('/', function(req, res) {
         res.render('index', {
-        	title : pkg.title
+			title : pkg.title,
+			requestToken : ApiController.Twitter.getRequestToken()
         });
 	});
 

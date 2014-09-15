@@ -631,7 +631,7 @@ samp {
   overflow: visible;
   /* [8] */
   text-align: center;
-  background-color: #2ecc71;
+  background-color: #3498db;
   border-radius: 5px;
   -webkit-user-select: none;
      -moz-user-select: none;
@@ -642,7 +642,7 @@ samp {
   color: #fff;
 }
 .btn:hover, .tabs a:hover, .btn:active, .tabs a:active, .btn:focus, .tabs a:focus {
-  background-color: #25a25a;
+  background-color: #217dbb;
 }
 .btn, .tabs a, .btn:hover, .tabs a:hover, .btn:active, .tabs a:active, .btn:focus, .tabs a:focus, .btn:visited, .tabs a:visited {
   text-decoration: none;
@@ -2131,9 +2131,9 @@ body {
   text-align: center;
 }
 
-.control--username {
+.control--submit {
   display: block;
-  max-width: 400px;
+  width: 400px;
   margin: 20px auto;
 }
 
@@ -2144,7 +2144,7 @@ body {
   margin: 0 auto;
   position: relative;
   display: inline-block;
-  padding: 0.5em;
+  padding: 1em;
   vertical-align: middle;
   text-align: center;
   background-color: transparent;
@@ -2178,6 +2178,10 @@ body {
 .cameraWindow.isHidden,
 .photoWindow.isHidden {
   opacity: 0;
+}
+
+.cameraWindow {
+  display: block;
 }
 
 .photoWindow {
