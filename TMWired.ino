@@ -10,14 +10,20 @@ boolean contact = false;
 boolean complete = false;
 boolean startPosition = false;
 
-long lastMillis = 0;
-long lastContactMillis = 50;
 int sens = 4; // reads
 long timeout = 100;
+
+long lastContactMillis = 0;
+int contactCount = 0;
+long lastCompleteMillis = 0;
+int completeCount = 0;
+
+
+long lastMillis = 0;
 bool gameOver = true;
 long flashLedDelay = 1000;
 int ledState = 0;
-int contactCount = 0;
+
 
 
 
@@ -47,20 +53,30 @@ void loop() {
     if (!contactRead) {
       contactCount++;
       lastContactMillis = millis();
-      if (contactCount > 4) {
-        contact = false;
+      if (contactCount > sens) {
+        contact = true;
       }
       else if (millis() - lastContactMillis > timeout) {
         contactCount = 0;
       }
     }
-    
-    //complete = digitalRead(COMPLETEPIN);
 
-    if (!contact) {
+    boolean completeRead = digitalRead(COMPLETEPIN);
+    if (!completeRead) {
+      completeCount++;
+      lastCompleteMillis = millis();
+      if (completeCount > sens) {
+        complete = true;
+      }
+      else if (millis() - lastCompleteMillis > timeout) {
+        completeCount = 0;
+      }
+    }
+
+    if (contact) {
       contactHappened();
     }
-    if (!complete) {
+    if (complete) {
       gameComplete();
     }
     flashLed();
@@ -133,6 +149,7 @@ void resetGame() {
 
 
 }
+
 
 
 
