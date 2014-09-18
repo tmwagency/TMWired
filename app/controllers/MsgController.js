@@ -28,7 +28,7 @@ var MsgController = {
 
 		//setup our Arduino connection
 		//commented out for testing purposes
-		//_self.Arduino.setupConnection();
+		_self.Arduino.setupConnection();
 
 		return _self;
 
@@ -159,8 +159,9 @@ var MsgController = {
 					SocketController.emitMsg('changeView', { view : 'inPlay' });
 					break;
 				case 'fail':
+					SocketController.emitMsg('capture', { state : 'fail' });
 				case 'complete':
-					SocketController.emitMsg('capture');
+					SocketController.emitMsg('capture', { state : 'complete' });
 					break;
 			}
 

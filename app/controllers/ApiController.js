@@ -35,20 +35,14 @@ var ApiController = {
 
 		console.log('ApiController :: newConnection');
 
-
-
-		socket.on('API.postUpdate', function (imgData) {
-
-			_self.saveFile(imgData);
-
-		});
+		socket.on('API.postUpdate', _self.saveFile);
 
 
 		return _self;
 
 	},
 
-	saveFile : function (imgData, name) {
+	saveFile : function (imgData, state, userName) {
 
 
 		var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
@@ -62,7 +56,7 @@ var ApiController = {
 			base64Data,
 			'base64',
 			function(err) {
-				ApiController.Twitter.postUpdate(name, filepath)
+				ApiController.Twitter.postUpdate(name, state, filepath)
 			}
 		);
 
@@ -97,10 +91,10 @@ var ApiController = {
 
 
 		//post my update to twitter
-		postUpdate : function (name, filepath) {
+		postUpdate : function (name, state, filepath) {
 
 			var tweet = _self.Twitter.tweet,
-				tweetStatus = tweet.status + name;
+				tweetStatus = tweet.status + name + state;
 
 			var tuwm = new twitter_update_with_media({
 				consumer_key: _self.Twitter.keys.consumerKey,

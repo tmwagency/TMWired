@@ -67,12 +67,16 @@ TMW.Wired = {
 			//need to actually check if the user exists
 			TMW.Wired.userVerified();
 
-			// Used to test post quickly
-			// TMW.Wired.setupPhotoDimensions();
-			// TMW.Wired.captureScreenShot();
-
 			e.preventDefault();
 		});
+
+
+		//testing
+		// TMW.Wired.changeView({view : 'loader'})
+		// TMW.Wired.changeView({view : 'inPlay'})
+		//
+		//TMW.Wired.setupPhotoDimensions();
+		//TMW.Wired.captureScreenShot();
 
 	},
 
@@ -131,23 +135,16 @@ TMW.Wired = {
 						TMW.Wired.setupPhotoDimensions();
 					});
 					break;
+				case 'complete':
+					console.log('I AM COMPLETED')
+					break;
+				case 'fail':
+					console.log('I AM FAILURE');
+					break;
 			}
 
 		}
 
-
-	},
-
-	//captures whatever is on the camera at the time the function is called
-	captureScreenShot : function () {
-
-		TMW.Wired.ctx.drawImage(TMW.Wired.videoOutput, 0, 0, TMW.Wired.videoWidth, TMW.Wired.videoHeight);
-
-		var data = TMW.Wired.canvas.toDataURL('image/png');
-		TMW.Wired.photo.setAttribute('src', data);
-
-		//emit tweet status message here
-		TMW.Wired.socket.emit('API.postUpdate', data);
 
 	},
 
@@ -163,6 +160,8 @@ TMW.Wired = {
 		}, TMW.Wired.animationDelay);
 
 	},
+
+
 
 
 	hasGetUserMedia : function () {
@@ -253,6 +252,28 @@ TMW.Wired = {
 		TMW.Wired.canvas.setAttribute('height', TMW.Wired.videoHeight);
 
 		TMW.Wired.ctx = TMW.Wired.canvas.getContext('2d');
+
+	},
+
+
+	//captures whatever is on the camera at the time the function is called
+	captureScreenShot : function (state) {
+
+		TMW.Wired.ctx.drawImage(TMW.Wired.videoOutput, 0, 0, TMW.Wired.videoWidth, TMW.Wired.videoHeight);
+
+		//change state based on win/lose
+		TMW.Wired.changeView({
+			view : state
+		});
+
+		var data = TMW.Wired.canvas.toDataURL('image/png');
+		TMW.Wired.photo.setAttribute('src', data);
+
+		//emit tweet status message here
+		TMW.Wired.socket.emit('API.postUpdate', {
+			imgData : data,
+			gameState : state
+		});
 
 	},
 
