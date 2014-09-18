@@ -72,11 +72,18 @@ TMW.Wired = {
 
 
 		//testing
-		// TMW.Wired.changeView({view : 'loader'})
-		// TMW.Wired.changeView({view : 'inPlay'})
+		// TMW.Wired.changeView({view : 'loader'});
+		// TMW.Wired.changeView({view : 'inPlay'});
 		//
 		//TMW.Wired.setupPhotoDimensions();
 		//TMW.Wired.captureScreenShot();
+		//
+		//
+
+		// FAIL/SUCCESS DEBUG
+		//TMW.Wired.changeView({view : 'fail'});
+		//TMW.Wired.changeView({view : 'complete'});
+
 
 	},
 
@@ -99,7 +106,7 @@ TMW.Wired = {
 
 	changeView : function (data) {
 
-		log('script.js :: changeView');
+		log('script.js :: [changeView] data:', data);
 
 		//if we’re animating something, then add our view change to a queue and recall in a second
 		if (TMW.Wired.isAnimating) {
@@ -137,9 +144,15 @@ TMW.Wired = {
 					break;
 				case 'complete':
 					console.log('I AM COMPLETED')
+
+					// TODO : set some kind of view state to 'user-fail'
+					document.querySelector('.successView').classList.remove('isHidden');
 					break;
 				case 'fail':
 					console.log('I AM FAILURE');
+
+					// TODO : set some kind of view state to 'user-fail'
+					document.querySelector('.failView').classList.remove('isHidden');
 					break;
 			}
 

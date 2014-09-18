@@ -252,7 +252,7 @@ body {
   font-size: 20px;
   font-size: 1rem;
   line-height: 1.4;
-  color: #444;
+  color: #444444;
   -webkit-font-feature-settings: "liga","dlig";
      -moz-font-feature-settings: "liga","dlig";
           font-feature-settings: "liga","dlig";
@@ -553,13 +553,13 @@ samp {
 }
 
 ::-moz-selection {
-  color: #fff;
+  color: white;
   background: #3498db;
   text-shadow: none;
 }
 
 ::selection {
-  color: #fff;
+  color: white;
   background: #3498db;
   text-shadow: none;
 }
@@ -989,7 +989,7 @@ input[type="button"].btn--block {
   font-size: 30px;
   font-size: 1.5rem;
   line-height: 1.4;
-  color: #444;
+  color: #444444;
   border: 0;
   border-bottom: 1px solid #eee;
   white-space: normal;
@@ -1017,7 +1017,7 @@ input[type="button"].btn--block {
 .form-label {
   display: block;
   margin-bottom: 5px;
-  color: #444;
+  color: #444444;
   font-weight: bold;
 }
 .form-label small {
@@ -1034,11 +1034,11 @@ input[type="button"].btn--block {
   font-size: 1rem;
   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
   line-height: 1.4;
-  color: #444;
+  color: #444444;
   font-weight: normal;
   vertical-align: baseline;
-  background-color: #fff;
-  border: 2px solid #ccc;
+  background-color: white;
+  border: 2px solid #cccccc;
   border-radius: 5px;
   -webkit-transition: border 200ms ease-in-out;
      -moz-transition: border 200ms ease-in-out;
@@ -1069,7 +1069,7 @@ input[type="button"].btn--block {
   padding: initial;
   line-height: initial;
   border: initial;
-  background-color: #fff;
+  background-color: white;
   background-color: initial;
 }
 .form-input[type="hidden"] {
@@ -1092,7 +1092,7 @@ input[type="button"].btn--block {
 }
 .form-input[disabled], .form-input[readonly] {
   background-color: #e6e6e6;
-  border-color: #ccc;
+  border-color: #cccccc;
   cursor: not-allowed;
 }
 
@@ -1107,7 +1107,7 @@ input[type="button"].btn--block {
 }
 
 .form-input--select {
-  background-color: #fff;
+  background-color: white;
 }
 .form-input--select[multiple], .form-input--select[size] {
   height: auto;
@@ -1169,7 +1169,7 @@ input[type="submit"] {
   font-size: 30px;
   font-size: 1.5rem;
   line-height: 1.4;
-  color: #444;
+  color: #444444;
   border: 0;
   border-bottom: 1px solid #eee;
   white-space: normal;
@@ -1238,7 +1238,7 @@ input[type="submit"] {
   padding: 27px 20px 28px;
   margin-top: 28px;
   margin-bottom: 28px;
-  background-color: #f5f5f5;
+  background-color: whitesmoke;
   border-top: 1px solid #ddd;
 }
 .form-actions .btn, .form-actions .tabs a, .tabs .form-actions a {
@@ -1435,7 +1435,7 @@ input[type="submit"] {
   /* Put the input behind the label so it doesn't overlay text */
 }
 .control--custom input:focus ~ .control-indicator {
-  box-shadow: 0 0 0 0.075rem #fff, 0 0 0 0.2rem #a3b1b2;
+  box-shadow: 0 0 0 0.075rem white, 0 0 0 0.2rem #a3b1b2;
 }
 .control--custom input:checked ~ .control-indicator {
   color: #fff;
@@ -1806,15 +1806,15 @@ th {
   padding: 8px;
   line-height: 28px;
   vertical-align: top;
-  border-top: 1px solid #ddd;
+  border-top: 1px solid #dddddd;
 }
 .table > thead > tr > th,
 .table > thead > tr > td {
   vertical-align: bottom;
-  border-bottom: 2px solid #ddd;
+  border-bottom: 2px solid #dddddd;
 }
 .table > tfoot > tr > td {
-  border-top: 3px solid #ddd;
+  border-top: 3px solid #dddddd;
 }
 .table > caption + thead > tr:first-child > th,
 .table > caption + thead > tr:first-child > td,
@@ -1825,7 +1825,7 @@ th {
   border-top: 0;
 }
 .table > tbody + tbody {
-  border-top: 2px solid #ddd;
+  border-top: 2px solid #dddddd;
 }
 .table .table {
   background-color: #f1f1f1;
@@ -1845,7 +1845,7 @@ th {
  * Add borders all around the table and between all the columns.
  */
 .table--bordered {
-  border: 2px solid #ddd;
+  border: 2px solid #dddddd;
 }
 .table--bordered > thead > tr > th,
 .table--bordered > thead > tr > td,
@@ -1853,7 +1853,7 @@ th {
 .table--bordered > tbody > tr > td,
 .table--bordered > tfoot > tr > th,
 .table--bordered > tfoot > tr > td {
-  border: 1px solid #ddd;
+  border: 1px solid #dddddd;
 }
 .table--bordered > thead > tr > th,
 .table--bordered > thead > tr > td {
@@ -1905,7 +1905,7 @@ th {
  */
 .table--hover > tbody > tr:hover > td,
 .table--hover > tbody > tr:hover > th {
-  background-color: #f5f5f5;
+  background-color: whitesmoke;
 }
 
 /**
@@ -1936,7 +1936,7 @@ table th[class*="col-"] {
     overflow-y: hidden;
     overflow-x: auto;
     -ms-overflow-style: -ms-autohiding-scrollbar;
-    border: 1px solid #ddd;
+    border: 1px solid #dddddd;
     -webkit-overflow-scrolling: touch;
   }
   .table--responsive > .table {
@@ -1987,7 +1987,7 @@ pre {
   font-family: Menlo, Monaco, "Courier New", monospace;
   font-size: 17px;
   font-size: 0.85rem;
-  color: #444;
+  color: #444444;
   border-radius: 3px;
   -moz-tab-size: 3;
        tab-size: 3;
@@ -1995,8 +1995,8 @@ pre {
 
 code {
   padding: 2px 4px;
-  color: #444;
-  background-color: #ddd;
+  color: #444444;
+  background-color: #dddddd;
 }
 
 pre {
@@ -2004,8 +2004,8 @@ pre {
   padding: 13.5px;
   margin: 0 0 14px;
   line-height: 1.4;
-  color: #444;
-  background-color: #ddd;
+  color: #444444;
+  background-color: #dddddd;
   border-radius: 4px;
   white-space: pre;
 }
@@ -2014,8 +2014,8 @@ pre.prettyprint {
 }
 pre code {
   padding: 0;
-  color: #444;
-  background-color: #ddd;
+  color: #444444;
+  background-color: #dddddd;
   border: 0;
 }
 
@@ -2149,8 +2149,8 @@ body {
   text-align: center;
   background-color: transparent;
   border: 5px solid transparent;
-  border-top-color: #c22;
-  border-bottom-color: #c22;
+  border-top-color: #cc2222;
+  border-bottom-color: #cc2222;
   border-radius: 50%;
   -webkit-animation: spin 1s infinite linear;
      -moz-animation: spin 1s infinite linear;
@@ -2193,6 +2193,7 @@ body {
     -webkit-transform: rotateZ(0deg);
             transform: rotateZ(0deg);
   }
+
   100% {
     -webkit-transform: rotateZ(360deg);
             transform: rotateZ(360deg);
@@ -2204,6 +2205,7 @@ body {
     -moz-transform: rotateZ(0deg);
          transform: rotateZ(0deg);
   }
+
   100% {
     -moz-transform: rotateZ(360deg);
          transform: rotateZ(360deg);
@@ -2216,6 +2218,7 @@ body {
        -moz-transform: rotateZ(0deg);
             transform: rotateZ(0deg);
   }
+
   100% {
     -webkit-transform: rotateZ(360deg);
        -moz-transform: rotateZ(360deg);
@@ -2227,6 +2230,7 @@ body {
     -webkit-transform: rotateZ(360deg);
             transform: rotateZ(360deg);
   }
+
   100% {
     -webkit-transform: rotateZ(-360deg);
             transform: rotateZ(-360deg);
@@ -2237,6 +2241,7 @@ body {
     -moz-transform: rotateZ(360deg);
          transform: rotateZ(360deg);
   }
+
   100% {
     -moz-transform: rotateZ(-360deg);
          transform: rotateZ(-360deg);
@@ -2248,6 +2253,7 @@ body {
        -moz-transform: rotateZ(360deg);
             transform: rotateZ(360deg);
   }
+
   100% {
     -webkit-transform: rotateZ(-360deg);
        -moz-transform: rotateZ(-360deg);
@@ -2278,6 +2284,127 @@ body {
  * Views
  * =================================
  */
+.resultsView.fadeOut {
+  -webkit-animation: fadeOut 1s ease-in;
+     -moz-animation: fadeOut 1s ease-in;
+          animation: fadeOut 1s ease-in;
+  -webkit-animation-iteration-count: 1;
+     -moz-animation-iteration-count: 1;
+          animation-iteration-count: 1;
+  -webkit-animation-fill-mode: forwards;
+     -moz-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+.resultsView.isHidden {
+  display: none;
+}
+.resultsView.failView {
+  color: red;
+}
+.resultsView.successView {
+  color: green;
+}
+.resultsView .resultsViewHeading {
+  position: absolute;
+  top: 0;
+  font-size: 250px;
+  line-height: 1;
+  -webkit-animation: pulsate 3s ease-out;
+     -moz-animation: pulsate 3s ease-out;
+          animation: pulsate 3s ease-out;
+  -webkit-animation-iteration-count: 1;
+     -moz-animation-iteration-count: 1;
+          animation-iteration-count: 1;
+  -webkit-animation-fill-mode: forwards;
+     -moz-animation-fill-mode: forwards;
+          animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes pulsate {
+  0% {
+    -webkit-transform: scale(0.3, 0.3);
+            transform: scale(0.3, 0.3);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: scale(1, 1);
+            transform: scale(1, 1);
+    opacity: 0.4;
+  }
+}
+
+@-moz-keyframes pulsate {
+  0% {
+    -moz-transform: scale(0.3, 0.3);
+         transform: scale(0.3, 0.3);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    -moz-transform: scale(1, 1);
+         transform: scale(1, 1);
+    opacity: 0.4;
+  }
+}
+
+@keyframes pulsate {
+  0% {
+    -webkit-transform: scale(0.3, 0.3);
+       -moz-transform: scale(0.3, 0.3);
+            transform: scale(0.3, 0.3);
+    opacity: 0;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    -webkit-transform: scale(1, 1);
+       -moz-transform: scale(1, 1);
+            transform: scale(1, 1);
+    opacity: 0.4;
+  }
+}
+@-webkit-keyframes fadeOut {
+  0% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 0;
+    height: 0;
+  }
+}
+@-moz-keyframes fadeOut {
+  0% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 0;
+    height: 0;
+  }
+}
+@keyframes fadeOut {
+  0% {
+    opacity: 0.4;
+  }
+
+  100% {
+    opacity: 0;
+    height: 0;
+  }
+}
 /**
  * Helper/utility classes
  * =================================
