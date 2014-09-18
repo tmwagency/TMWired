@@ -25,8 +25,6 @@ TMW.Wired = {
 
 		this.initCamera();
 
-		this.checkForUser();
-
 	},
 
 	makeSocketConnection : function () {
@@ -66,8 +64,12 @@ TMW.Wired = {
 				username : $('.control--username').value
 			};
 
-			//redirect user to authenticate with twitter
-			window.location.href= 'https://twitter.com/oauth/authorize?oauth_token=' + $('#requestToken').value;
+			//need to actually check if the user exists
+			TMW.Wired.userVerified();
+
+			// Used to test post quickly
+			// TMW.Wired.setupPhotoDimensions();
+			// TMW.Wired.captureScreenShot();
 
 			e.preventDefault();
 		});
@@ -77,23 +79,11 @@ TMW.Wired = {
 	userVerified : function () {
 		//simply here in case we want to do anything in between these states
 		//UI is informed of successful oauth from User
-		//
+
 		//respond that UI is now ready and to check if the Arduino is ready
 		TMW.Wired.socket.emit('userLoggedIn');
 	},
 
-
-	checkForUser : function () {
-
-		var oauth_token = this.getParameterByName('oauth_token'),
-			oauth_verifier = this.getParameterByName('oauth_verifier');
-
-		if (oauth_verifier.length > 0) {
-			console.log('script.js :: checkForUser');
-			TMW.Wired.socket.emit('API.getAccessToken', oauth_verifier);
-		}
-
-	},
 
 	getParameterByName : function (name) {
 		name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -128,7 +118,6 @@ TMW.Wired = {
 					$('.loading').classList.remove('isHidden');
 
 					TMW.Wired.isAnimating = true;
-
 					TMW.Wired.setAnimationTimer();
 
 					break;
@@ -155,9 +144,13 @@ TMW.Wired = {
 		TMW.Wired.ctx.drawImage(TMW.Wired.videoOutput, 0, 0, TMW.Wired.videoWidth, TMW.Wired.videoHeight);
 
 		var data = TMW.Wired.canvas.toDataURL('image/png');
-    	TMW.Wired.photo.setAttribute('src', data);
+		TMW.Wired.photo.setAttribute('src', data);
+
+		//emit tweet status message here
+		TMW.Wired.socket.emit('API.postUpdate', data);
 
 	},
+
 
 	setAnimationTimer : function (cb) {
 
@@ -214,13 +207,13 @@ TMW.Wired = {
 			if (sourceInfo.kind === 'video') {
 				//try and match our external webcam id
 				log('script.js :: Trying to match external webcam ID...');
-				if (sourceInfo.id.match(/89e0d0c17efbd5c0525e4db7b6c67e6f557d4456a82da194ebda964d2de72a57/)) {
-				 	log('Matched External Camera Id');
+				//if (sourceInfo.id.match(/89e0d0c17efbd5c0525e4db7b6c67e6f557d4456a82da194ebda964d2de72a57/)) {
+					log('Matched External Camera Id');
 					TMW.Wired.startStream(sourceInfo.id);
-				}
-				else {
-				log('script.js :: Failed to match external webcam ID.');
-				}
+				// }
+				// else {
+				// 	log('script.js :: Failed to match external webcam ID.');
+				// }
 			}
 		}
 
@@ -247,19 +240,19 @@ TMW.Wired = {
 
 		window.stream = stream; //makes stream available to console
 		TMW.Wired.videoOutput.src = window.URL.createObjectURL(stream);
-  		TMW.Wired.videoOutput.play();
+		TMW.Wired.videoOutput.play();
 
 	},
 
 	setupPhotoDimensions : function () {
 
 		TMW.Wired.videoWidth = TMW.Wired.videoOutput.videoWidth;
-  		TMW.Wired.videoHeight = TMW.Wired.videoOutput.videoHeight;
+		TMW.Wired.videoHeight = TMW.Wired.videoOutput.videoHeight;
 
-  		TMW.Wired.canvas.setAttribute('width', TMW.Wired.videoWidth);
-  		TMW.Wired.canvas.setAttribute('height', TMW.Wired.videoHeight);
+		TMW.Wired.canvas.setAttribute('width', TMW.Wired.videoWidth);
+		TMW.Wired.canvas.setAttribute('height', TMW.Wired.videoHeight);
 
-  		TMW.Wired.ctx = TMW.Wired.canvas.getContext('2d');
+		TMW.Wired.ctx = TMW.Wired.canvas.getContext('2d');
 
 	},
 

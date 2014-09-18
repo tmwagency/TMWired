@@ -6,9 +6,17 @@
 
 var SocketController = null,
 
-	twitterAPI = require('node-twitter-api'),
+	twitterAPI = require('twitter'),
+
+	twitter_update_with_media = require('../twitter_update_with_media'),
+
+	fs = require('fs'),
+	path = require('path'),
 
 	twitter = null,
+
+	imgFolder = 'public/img/shots/',
+	imgExt = '.png',
 
 	pkg = require('../../package.json');
 
@@ -27,20 +35,36 @@ var ApiController = {
 
 		console.log('ApiController :: newConnection');
 
-		socket.on('API.getAccessToken', function (oauthVerifier) {
 
-			_self.Twitter.getAccessToken(oauthVerifier);
 
-		});
+		socket.on('API.postUpdate', function (imgData) {
 
-		socket.on('API.postUpdate', function (img) {
-
-			_self.Twitter.postUpdate(img);
+			_self.saveFile(imgData);
 
 		});
 
 
 		return _self;
+
+	},
+
+	saveFile : function (imgData, name) {
+
+
+		var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
+
+		//this will be replaced by the users name
+		var name = 'ash',
+			filepath = imgFolder + name + imgExt;
+
+		require("fs").writeFile(
+			filepath,
+			base64Data,
+			'base64',
+			function(err) {
+				ApiController.Twitter.postUpdate(name, filepath)
+			}
+		);
 
 	},
 
@@ -51,17 +75,12 @@ var ApiController = {
 			consumerKey : 'xClEq3PngrJQNvfhbDSaAqfTv',
 			consumerSecret : 'CCjtwzGN3huielmdYFoylxooWkfS76NO9QivLcjS0SWu1v2SWo',
 
-			requestToken : null,
-			requestTokenSecret : null
-		},
-
-		userKeys : {
-			accessToken : null,
-			accessTokenSecret : null
+			accessToken : '2457920262-duT0pTW1lP7oyi6c5L4mWprsZQNF4SDiDiQ5LIs',
+			accessTokenSecret : 'VFrKmso3izXk4DZmR2rZAOlt5lglXwPbYtEkdjyhiTMVp'
 		},
 
 		tweet : {
-			status : 'This will be my tweet text',
+			status : 'I’ve been playing TMWired, I scored blah - and my name is ',
 			media : [], //This data must be either the raw image bytes or encoded as base64
 			lat : null,
 			long : null,
@@ -70,96 +89,34 @@ var ApiController = {
 
 		init : function () {
 
-			twitter = new twitterAPI({
-							consumerKey: _self.Twitter.keys.consumerKey,
-							consumerSecret: _self.Twitter.keys.consumerSecret,
-							callback: 'http://0.0.0.0:3004'
-						});
-
-			twitter.getRequestToken(function(error, requestToken, requestTokenSecret, results){
-				if (error) {
-					console.log("Error getting OAuth request token : ", error);
-				} else {
-					//store token and tokenSecret somewhere, you'll need them later; redirect user
-					console.log('oAuth success');
-					_self.Twitter.keys.requestToken = requestToken;
-					_self.Twitter.keys.requestTokenSecret = requestTokenSecret;
-				}
-			});
-
 			//return our _self object
 			return _self;
 
 		},
 
-		getAccessToken : function (oauth_verifier) {
-
-			console.log('ApiControll :: getAccessToken');
-
-			twitter.getAccessToken(_self.Twitter.keys.requestToken, _self.Twitter.keys.requestTokenSecret, oauth_verifier,
-				function (error, accessToken, accessTokenSecret, results) {
-					if (error) {
-						console.log(error);
-					} else {
-						//store accessToken and accessTokenSecret somewhere (associated to the user)
-						//Step 4: Verify Credentials belongs here
-						console.log('User Access token returned');
-						//if was doing for multiple connections, would need to store in a key-value pairing, but one connection so dont worry about
-						_self.Twitter.userKeys.accessToken = accessToken;
-						_self.Twitter.userKeys.accessTokenSecret = accessTokenSecret;
-
-						_self.Twitter.verfiyCredentials(accessToken, accessTokenSecret);
-					}
-				}
-			);
-
-		},
-
-		verfiyCredentials : function (accessToken, accessTokenSecret) {
-
-			console.log('ApiController :: verifyCreds');
-
-			twitter.verifyCredentials(accessToken, accessTokenSecret, function(error, data, response) {
-				if (error) {
-					//something was wrong with either accessToken or accessTokenSecret
-					//start over with Step 1
-					console.log('ApiController :: verifyCreds :: Somethign went wrong, please restart server and allow app perimissions again');
-				} else {
-					//accessToken and accessTokenSecret can now be used to make api-calls (not yet implemented)
-					//data contains the user-data described in the official Twitter-API-docs
-					//you could e.g. display his screen_name
-					console.log(data["screen_name"]);
-
-					SocketController.emitMsg('userVerified');
-				}
-			});
-
-		},
-
-		getRequestToken : function () {
-
-			return _self.Twitter.keys.requestToken;
-
-		},
 
 
 		//post my update to twitter
-		postUpdate : function () {
+		postUpdate : function (name, filepath) {
 
-			var tweet = _self.Twitter.tweet;
+			var tweet = _self.Twitter.tweet,
+				tweetStatus = tweet.status + name;
 
-			twitter.statuses("update_with_media", {
-					status: tweet.status,
-					media: tweet.media
-				},
-				_self.Twitter.userKeys.accessToken,
-				_self.Twitter.userKeys.accessTokenSecret,
-				function(error, data, response) {
-					if (error) {
-						// something went wrong
-					} else {
-						// data contains the data sent by twitter
+			var tuwm = new twitter_update_with_media({
+				consumer_key: _self.Twitter.keys.consumerKey,
+			    consumer_secret: _self.Twitter.keys.consumerSecret,
+				token: _self.Twitter.keys.accessToken,
+				token_secret: _self.Twitter.keys.accessTokenSecret
+			});
+
+			tuwm.post(
+				tweetStatus,
+				filepath,
+				function(err, response) {
+					if (err) {
+					console.log(err);
 					}
+					console.log(response);
 				}
 			);
 

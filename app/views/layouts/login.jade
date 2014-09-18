@@ -15,12 +15,9 @@ html
 			.page-content
 				form.form--login
 					label
-						| Let’s get started…
-						input.btn.control--submit(type='submit' value="Sign in with Twitter")
-					input(id='requestToken' class='control-submit' value=requestToken type='hidden')
-
-
-
+						| Enter your Twitter Username
+						input(class='form-input control--username' name='username' required)
+						input.btn.control--submit(type='submit' value="Sign in")
 
 				.loading.isHidden
 

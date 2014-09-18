@@ -17,8 +17,7 @@ module.exports = function (app) {
 
 	app.get('/', function(req, res) {
         res.render('index', {
-			title : pkg.title,
-			requestToken : ApiController.Twitter.getRequestToken()
+			title : pkg.title
         });
 	});
 

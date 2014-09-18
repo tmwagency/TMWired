@@ -54,7 +54,7 @@ var MsgController = {
 
 			//connect to the arduino through it’s path
 			//sp = new SerialPort("/dev/tty.usbserial-A92HH373", {
-			sp = new SerialPort("COM8", {
+			sp = new SerialPort("COM10", {
 				baudrate: 9600,
 	    		parser: require("serialport").parsers.readline('\r\n')
 			});
