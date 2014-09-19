@@ -1,6 +1,8 @@
 $results-view-watermark-opacity: 0.4;
 
-.resultsView {
+.endScreen {
+
+	position: relative;
 
 	&.fadeOut {
 		animation: fadeOut 1s ease-in;
@@ -10,25 +12,41 @@ $results-view-watermark-opacity: 0.4;
 
 	&.isHidden {
 		display: none;
-	}	
-
-	&.failView {
-		color: red;
 	}
 
-	&.successView {
+	&.fail {
+		color: $red-dark;
+	}
+
+	&.complete {
 		color: green;
 	}
 
-	& .resultsViewHeading {
+	& .stateText {
 		position: absolute;
-		
-		top: 0;
-		font-size: 250px;
+		width: 100%;
+		text-align: center;
+		top: 200px;
+		font-size: 200px;
 		line-height: 1;
 		animation: pulsate 3s ease-out;
     	animation-iteration-count: 1;
     	animation-fill-mode: forwards;
+	}
+
+	.retry, .reset {
+		width: 140px;
+		height: 60px;
+		margin-bottom: 60px;
+		color: black;
+		font-size: 18px;
+	}
+
+	.retry {
+
+	}
+
+	.reset {
 	}
 }
 

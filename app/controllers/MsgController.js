@@ -29,7 +29,7 @@ var MsgController = {
 		//setup our Arduino connection
 		//commented out for testing purposes
 		
-		//_self.Arduino.setupConnection();
+		_self.Arduino.setupConnection();
 
 		return _self;
 
@@ -123,20 +123,15 @@ var MsgController = {
 
 			uiState = 'connected';
 			SocketController.emitMsg('connectSuccess');
-
 		},
 
 		initCustomEvents : function (socket) {
 
-			socket.on('userLoggedIn', function () {
-				console.log('ui : user is ready');
+			socket.on('userLoggedIn', _self.UI.userLoginHandler);
 
-				//see if the arduino is in a ready state
-				_self.UI.sendStartSignal();
+			socket.on('userRetry', _self.UI.userRetryHandler);
 
-				//ui is in a loading state while it waits for the arduino to respond that it is ready
-				uiState = 'loading';
-			});
+			socket.on('userReset', _self.UI.userResetHandler);
 
 			socket.on('disconnect', function() {
 				console.log('ui : user has disconnected');
@@ -144,7 +139,30 @@ var MsgController = {
 				//clear timer if user disconnects
 				clearTimeout(timer);
 			});
+		},
 
+		userLoginHandler : function () {
+			console.log('ui : user is ready');
+
+			//see if the arduino is in a ready state
+			_self.UI.sendStartSignal();
+
+			//ui is in a loading state while it waits for the arduino to respond that it is ready
+			uiState = 'loading';
+		},
+
+		userRetryHandler : function () {
+
+			uiState = 'connected';
+
+			_self.UI.userLoginHandler();
+		},
+
+		userResetHandler : function () {
+
+			uiState = 'connected';
+
+			SocketController.emitMsg('changeView', { view : 'initial' });
 		},
 
 		receiveMsg : function (msg) {
@@ -170,6 +188,8 @@ var MsgController = {
 		},
 
 		sendStartSignal : function (delay) {
+
+			console.log('sendStartSignal');
 
 			delay = (delay !== null ? delay : 0);
 
