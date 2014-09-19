@@ -51,7 +51,7 @@ var ApiController = {
 		var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
 
 		//this will be replaced by the users name
-		var filepath = imgFolder + name + imgExt;
+		var filepath = imgFolder + userName + imgExt;
 
 		require("fs").writeFile(
 			filepath,
