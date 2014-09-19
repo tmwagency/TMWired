@@ -15,6 +15,9 @@ var
 	timer = null,
 	uiState = null,
 
+	DELAY_ON_FAIL = 0,
+	DELAY_ON_COMPLETE = 0,
+
 	SocketController = null,
 
 	pkg = require('../../package.json');
@@ -159,10 +162,14 @@ var MsgController = {
 					SocketController.emitMsg('changeView', { view : 'inPlay' });
 					break;
 				case 'fail':
-					SocketController.emitMsg('capture', { state : 'fail' });
+					setTimeout(function () {
+						SocketController.emitMsg('capture', { state : 'fail' });
+					}, DELAY_ON_FAIL);
 					break;
 				case 'complete':
-					SocketController.emitMsg('capture', { state : 'complete' });
+					setTimeout(function () {
+						SocketController.emitMsg('capture', { state : 'complete' });
+					}, DELAY_ON_COMPLETE);
 					break;
 			}
 
