@@ -81,6 +81,8 @@ TMW.Wired = {
 			e.preventDefault();
 		});
 
+		TMW.Wired.usernameInput.focus();
+
 
 		//testing
 		// TMW.Wired.changeView({view : 'loader'});
@@ -141,7 +143,6 @@ TMW.Wired = {
 				log('RESETTING VIEW...');
 
 					TMW.Wired.usernameInput.value = '';
-					TMW.Wired.usernameInput.focus();
 
 					TMW.Wired.endScreen.classList.add('isHidden');
 					TMW.Wired.endScreen.classList.remove('fail');
@@ -149,6 +150,8 @@ TMW.Wired = {
 
 					TMW.Wired.isAnimating = false;
 					$('.form--login').style.display = 'block';
+
+					TMW.Wired.usernameInput.focus();
 
 					break;
 				case 'loader':
@@ -163,8 +166,8 @@ TMW.Wired = {
 
 					TMW.Wired.isAnimating = true;
 					TMW.Wired.setAnimationTimer();
-
 					break;
+					
 				case 'inPlay':
 					document.querySelector('.loading').classList.add('isHidden');
 
@@ -178,6 +181,7 @@ TMW.Wired = {
 						TMW.Wired.setupPhotoDimensions();
 					});
 					break;
+
 				case 'complete':
 					console.log('I AM COMPLETED');
 					TMW.Wired.gameCompleteText.innerHTML = 'WINNER!';
@@ -185,8 +189,9 @@ TMW.Wired = {
 					TMW.Wired.endScreen.classList.remove('isHidden');
 					TMW.Wired.endScreen.classList.add('complete');
 					TMW.Wired.activateResetButtons();
-
+					TMW.Wired.resetButton.focus();
 					break;
+
 				case 'fail':
 					console.log('I AM FAILURE');
 					TMW.Wired.gameCompleteText.innerHTML = 'LOSER!';
@@ -194,6 +199,7 @@ TMW.Wired = {
 					TMW.Wired.endScreen.classList.remove('isHidden');
 					TMW.Wired.endScreen.classList.add('fail');
 					TMW.Wired.activateResetButtons();
+					TMW.Wired.retryButton.focus();
 					break;
 			}
 
