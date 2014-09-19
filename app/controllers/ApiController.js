@@ -42,21 +42,23 @@ var ApiController = {
 
 	},
 
-	saveFile : function (imgData, state, userName) {
+	saveFile : function (data) {
 
+		var imgData = data.imgData,
+			state = data.gameState,
+			userName = data.userName;
 
 		var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
 
 		//this will be replaced by the users name
-		var name = 'ash',
-			filepath = imgFolder + name + imgExt;
+		var filepath = imgFolder + userName + imgExt;
 
 		require("fs").writeFile(
 			filepath,
 			base64Data,
 			'base64',
 			function(err) {
-				ApiController.Twitter.postUpdate(name, state, filepath)
+				ApiController.Twitter.postUpdate(userName, state, filepath)
 			}
 		);
 
@@ -74,7 +76,17 @@ var ApiController = {
 		},
 
 		tweet : {
-			status : 'I’ve been playing TMWired, I scored blah - and my name is ',
+			status : {
+				fail : [
+					'Whups, sorry {name}. Looks like you failed #IncubatorExpo. Your loved ones have been alerted to your failure.',
+					'Tough going, {name}. You have what the youth refer to as Epically Failed at SteadyHand #IncubatorExpo.',
+					'We know you said you had nerves of steel, {name}, but your performance at #IncubatorExpo says otherwise.'
+				],
+				complete : [
+					'NICE ONE {name}. You made it to the end of SteadyHand at #IncubatorExpo. Have a bit of cake.',
+					'Looks like Cool Hand {name} made it the end of SteadyHand at #IncubatorExpo. Ooh, they’re so dreamy.'
+				]
+			},
 			media : [], //This data must be either the raw image bytes or encoded as base64
 			lat : null,
 			long : null,
@@ -93,9 +105,6 @@ var ApiController = {
 		//post my update to twitter
 		postUpdate : function (name, state, filepath) {
 
-			var tweet = _self.Twitter.tweet,
-				tweetStatus = tweet.status + name + state;
-
 			var tuwm = new twitter_update_with_media({
 				consumer_key: _self.Twitter.keys.consumerKey,
 			    consumer_secret: _self.Twitter.keys.consumerSecret,
@@ -103,17 +112,36 @@ var ApiController = {
 				token_secret: _self.Twitter.keys.accessTokenSecret
 			});
 
+			var tweetStatus = ApiController.Twitter.getStatus(state, name);
+
 			tuwm.post(
 				tweetStatus,
 				filepath,
 				function(err, response) {
 					if (err) {
-					console.log(err);
+					//console.log(err);
 					}
-					console.log(response);
+					//console.log(response);
 				}
 			);
 
+		},
+
+		getStatus : function (state, name) {
+
+			var random;
+
+			if (state === 'fail') {
+				random = Math.floor(Math.random() * 3);
+			} else if (state === 'complete'){
+				random = Math.floor(Math.random() * 2);
+			}
+
+			var tweet = _self.Twitter.tweet.status[state][random];
+			tweet = tweet.replace('{name}', '@' + name)
+
+			console.log('getStatus :: ', state, random, tweet);
+			return tweet;
 		}
 	}
 }

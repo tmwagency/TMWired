@@ -24,21 +24,37 @@ body {
 	padding: 40px;
 	text-align: center;
 
-	background-color: #333;
+	background: #F15A24 url('#{$img-path}/tmw_wired.svg') no-repeat center 60px;
+	background-size: auto 150px;
+	border-bottom: 35px solid #CE3D11;
 	color: #fff;
+	//text-align: left;
+	text-transform: uppercase;
+
+	@include font-size(0);
+	height: 280px;
 }
+	.page-header-subtitle {
+		display: block;
+		text-transform: none;
+	}
 
 .page-content {
 	text-align: center;
 }
 
+	.control--username {
+		margin-top: 10px;
+	}
+
 .page-footer {
 	position: fixed;
 	width: 100%;
 	padding: 10px 10%;
-	background: #333;
+	background: #CE3D11;
 	bottom: 0;
 	left: 0;
+	height: 35px;
 }
 	.page-footer-links {
 		> li {
@@ -110,12 +126,16 @@ $color: #c22;
 .form--login,
 .loading,
 .cameraWindow,
-.photoWindow {
+.photoWindow,
+.endScreen {
 	transition: opacity 500ms, margin-left 0 500ms;
 
 	&.isHidden {
 		opacity: 0;
 	//	margin-left: 100%;
+	}
+	&.isRemoved {
+		display: none;
 	}
 }
 

@@ -161,6 +161,7 @@ var MsgController = {
 					break;
 				case 'fail':
 					SocketController.emitMsg('capture', { state : 'fail' });
+					break;
 				case 'complete':
 					SocketController.emitMsg('capture', { state : 'complete' });
 					break;
@@ -184,7 +185,7 @@ var MsgController = {
 
 		}
 	}
-}
+};
 
 var _self = MsgController;
 

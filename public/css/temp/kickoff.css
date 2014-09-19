@@ -244,7 +244,7 @@ html {
 }
 
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 20px;
   font-size: 1rem;
   line-height: 1.4;
@@ -252,11 +252,15 @@ body {
   font-feature-settings: "liga","dlig";
 }
 
+.secondaryFont {
+  font-family: "Roboto Condensed", Helvetica, Arial, sans-serif;
+}
+
 /**
  * Paragraphs
  */
 p {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 20px;
   font-size: 1rem;
   margin-top: 0;
@@ -586,11 +590,11 @@ samp {
  * 4. Make buttons inherit font styles.
  * 5. Force all elements using beautons to appear clickable.
  * 6. Normalise box model styles.
- * 7. If the button’s text is 1em, and the button is (3 * font-size) tall, then
+ * 7. If the buttonÔÇÖs text is 1em, and the button is (3 * font-size) tall, then
  *    there is 1em of space above and below that text. We therefore apply 1em
  *    of space to the left and right, as padding, to keep consistent spacing.
  * 8. Fixes odd inner spacing in IE7.
- * 9. Don’t allow buttons to have underlines; it kinda ruins the illusion.
+ * 9. DonÔÇÖt allow buttons to have underlines; it kinda ruins the illusion.
  *10. Prevents from inheriting default anchor styles.
  */
 .btn, .tabs a {
@@ -1019,7 +1023,7 @@ input[type="button"].btn--block {
   padding: 0.5em;
   font-size: 20px;
   font-size: 1rem;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   line-height: 1.4;
   color: #444444;
   font-weight: normal;
@@ -1350,7 +1354,7 @@ input[type="submit"] {
   }
 }
 /**
- * Custom Checkboxes and radios - modified from WTF forms – http://wtfforms.com/
+ * Custom Checkboxes and radios - modified from WTF forms ÔÇô http://wtfforms.com/
  *
  * --------------------------------
  *
@@ -1766,7 +1770,7 @@ img, object, embed, video {
  * Tables
  */
 table {
-  background-color: #f1f1f1;
+  background-color: #FFFCE0;
 }
 
 th {
@@ -1809,7 +1813,7 @@ th {
   border-top: 2px solid #dddddd;
 }
 .table .table {
-  background-color: #f1f1f1;
+  background-color: #FFFCE0;
 }
 
 .table--condensed > thead > tr > th,
@@ -2030,11 +2034,11 @@ pre code {
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
-  background-color: #d7d7d7;
+  background-color: #fff7ad;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8b8b8b;
+  background: #ffe814;
   cursor: pointer;
   border-radius: 5px;
 }
@@ -2050,7 +2054,7 @@ pre code {
  * Global app/site styles
  */
 body {
-  background-color: #f1f1f1;
+  background-color: #FFFCE0;
 }
 
 /**
@@ -2070,21 +2074,37 @@ body {
 .page-header-title {
   padding: 40px;
   text-align: center;
-  background-color: #333;
+  background: #F15A24 url("/img/tmw_wired.svg") no-repeat center 60px;
+  background-size: auto 150px;
+  border-bottom: 35px solid #CE3D11;
   color: #fff;
+  text-transform: uppercase;
+  font-size: 0px;
+  font-size: 0rem;
+  height: 280px;
+}
+
+.page-header-subtitle {
+  display: block;
+  text-transform: none;
 }
 
 .page-content {
   text-align: center;
 }
 
+.control--username {
+  margin-top: 10px;
+}
+
 .page-footer {
   position: fixed;
   width: 100%;
   padding: 10px 10%;
-  background: #333;
+  background: #CE3D11;
   bottom: 0;
   left: 0;
+  height: 35px;
 }
 
 .page-footer-links > li {
@@ -2141,15 +2161,25 @@ body {
 .loading,
 .loading:after,
 .cameraWindow,
-.photoWindow {
+.photoWindow,
+.endScreen {
   transition: opacity 500ms, margin-left 0 500ms;
 }
 .form--login.isHidden,
 .loading.isHidden,
 .isHidden.loading:after,
 .cameraWindow.isHidden,
-.photoWindow.isHidden {
+.photoWindow.isHidden,
+.endScreen.isHidden {
   opacity: 0;
+}
+.form--login.isRemoved,
+.loading.isRemoved,
+.isRemoved.loading:after,
+.cameraWindow.isRemoved,
+.photoWindow.isRemoved,
+.endScreen.isRemoved {
+  display: none;
 }
 
 .cameraWindow {

@@ -11,6 +11,9 @@ TMW.Wired = {
 	ctx : null,
 	photo : document.querySelector('.photo'),
 
+	userDetails : 'Guest',
+	gameCompleteText : document.querySelector('.stateText'),
+
 	isAnimating : false,
 	animationDelay : 500,
 
@@ -60,7 +63,7 @@ TMW.Wired = {
 
 		//do some logging on stuff here
 		$('.form--login').on('submit', function (e) {
-			var userDetails = {
+			TMW.Wired.userDetails = {
 				username : $('.control--username').value
 			};
 
@@ -87,7 +90,7 @@ TMW.Wired = {
 
 	},
 
-	userVerified : function () {
+	userVerified : function (userDetails) {
 		//simply here in case we want to do anything in between these states
 		//UI is informed of successful oauth from User
 
@@ -138,21 +141,22 @@ TMW.Wired = {
 					TMW.Wired.isAnimating = true;
 
 					TMW.Wired.setAnimationTimer(function () {
+						document.querySelector('.loading').classList.add('isRemoved');
 						document.querySelector('video').classList.remove('isHidden');
 						TMW.Wired.setupPhotoDimensions();
 					});
 					break;
 				case 'complete':
-					console.log('I AM COMPLETED')
-
-					// TODO : set some kind of view state to 'user-fail'
-					document.querySelector('.successView').classList.remove('isHidden');
+					console.log('I AM COMPLETED');
+					TMW.Wired.gameCompleteText.innerHTML = 'WINNER!';
+					document.querySelector('video').classList.add('isRemoved');
+					document.querySelector('.endScreen').classList.remove('isHidden');
 					break;
 				case 'fail':
 					console.log('I AM FAILURE');
-
-					// TODO : set some kind of view state to 'user-fail'
-					document.querySelector('.failView').classList.remove('isHidden');
+					TMW.Wired.gameCompleteText.innerHTML = 'LOSER!';
+					document.querySelector('video').classList.add('isRemoved');
+					document.querySelector('.endScreen').classList.remove('isHidden');
 					break;
 			}
 
@@ -270,9 +274,11 @@ TMW.Wired = {
 
 
 	//captures whatever is on the camera at the time the function is called
-	captureScreenShot : function (state) {
+	captureScreenShot : function (stateObj) {
 
 		TMW.Wired.ctx.drawImage(TMW.Wired.videoOutput, 0, 0, TMW.Wired.videoWidth, TMW.Wired.videoHeight);
+
+		var state = stateObj.state;
 
 		//change state based on win/lose
 		TMW.Wired.changeView({
@@ -285,7 +291,8 @@ TMW.Wired = {
 		//emit tweet status message here
 		TMW.Wired.socket.emit('API.postUpdate', {
 			imgData : data,
-			gameState : state
+			gameState : state,
+			userName : TMW.Wired.userDetails.username
 		});
 
 	},
