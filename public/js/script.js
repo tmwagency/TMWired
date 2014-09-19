@@ -99,7 +99,7 @@ TMW.Wired = {
 
 	changeView : function (data) {
 
-		log('script.js :: changeView');
+		log('script.js :: changeView', data);
 
 		//if we’re animating something, then add our view change to a queue and recall in a second
 		if (TMW.Wired.isAnimating) {
@@ -131,15 +131,22 @@ TMW.Wired = {
 					TMW.Wired.isAnimating = true;
 
 					TMW.Wired.setAnimationTimer(function () {
+						document.querySelector('.loading').classList.add('isRemoved');
 						document.querySelector('video').classList.remove('isHidden');
 						TMW.Wired.setupPhotoDimensions();
 					});
 					break;
 				case 'complete':
-					console.log('I AM COMPLETED')
+					console.log('I AM COMPLETED');
+					document.querySelector('.stateText').innerHTML = 'I AM A SUCCESS';
+					document.querySelector('video').classList.add('isRemoved');
+					document.querySelector('.endScreen').classList.remove('isHidden');
 					break;
 				case 'fail':
 					console.log('I AM FAILURE');
+					document.querySelector('.stateText').innerHTML = 'I AM A FAILURE';
+					document.querySelector('video').classList.add('isRemoved');
+					document.querySelector('.endScreen').classList.remove('isHidden');
 					break;
 			}
 
@@ -257,9 +264,11 @@ TMW.Wired = {
 
 
 	//captures whatever is on the camera at the time the function is called
-	captureScreenShot : function (state) {
+	captureScreenShot : function (stateObj) {
 
 		TMW.Wired.ctx.drawImage(TMW.Wired.videoOutput, 0, 0, TMW.Wired.videoWidth, TMW.Wired.videoHeight);
+
+		var state = stateObj.state;
 
 		//change state based on win/lose
 		TMW.Wired.changeView({

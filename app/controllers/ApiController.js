@@ -42,8 +42,11 @@ var ApiController = {
 
 	},
 
-	saveFile : function (imgData, state, userName) {
+	saveFile : function (data) {
 
+		var imgData = data.imgData,
+			state = data.gameState,
+			userName = data.userName;
 
 		var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
 
@@ -108,9 +111,9 @@ var ApiController = {
 				filepath,
 				function(err, response) {
 					if (err) {
-					console.log(err);
+					//console.log(err);
 					}
-					console.log(response);
+					//console.log(response);
 				}
 			);
 

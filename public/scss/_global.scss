@@ -110,12 +110,16 @@ $color: #c22;
 .form--login,
 .loading,
 .cameraWindow,
-.photoWindow {
+.photoWindow,
+.endScreen {
 	transition: opacity 500ms, margin-left 0 500ms;
 
 	&.isHidden {
 		opacity: 0;
 	//	margin-left: 100%;
+	}
+	&.isRemoved {
+		display: none;
 	}
 }
 

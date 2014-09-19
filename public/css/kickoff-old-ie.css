@@ -588,11 +588,11 @@ samp {
  * 4. Make buttons inherit font styles.
  * 5. Force all elements using beautons to appear clickable.
  * 6. Normalise box model styles.
- * 7. If the button’s text is 1em, and the button is (3 * font-size) tall, then
+ * 7. If the buttonÔÇÖs text is 1em, and the button is (3 * font-size) tall, then
  *    there is 1em of space above and below that text. We therefore apply 1em
  *    of space to the left and right, as padding, to keep consistent spacing.
  * 8. Fixes odd inner spacing in IE7.
- * 9. Don’t allow buttons to have underlines; it kinda ruins the illusion.
+ * 9. DonÔÇÖt allow buttons to have underlines; it kinda ruins the illusion.
  *10. Prevents from inheriting default anchor styles.
  */
 .btn, .tabs a {
@@ -1355,7 +1355,7 @@ input[type="submit"] {
 }
 
 /**
- * Custom Checkboxes and radios - modified from WTF forms – http://wtfforms.com/
+ * Custom Checkboxes and radios - modified from WTF forms ÔÇô http://wtfforms.com/
  *
  * --------------------------------
  *
@@ -2026,7 +2026,8 @@ body {
 .loading,
 .loading:after,
 .cameraWindow,
-.photoWindow {
+.photoWindow,
+.endScreen {
   -webkit-transition: opacity 500ms, margin-left 0 500ms;
      -moz-transition: opacity 500ms, margin-left 0 500ms;
           transition: opacity 500ms, margin-left 0 500ms;
@@ -2035,8 +2036,17 @@ body {
 .loading.isHidden,
 .isHidden.loading:after,
 .cameraWindow.isHidden,
-.photoWindow.isHidden {
+.photoWindow.isHidden,
+.endScreen.isHidden {
   opacity: 0;
+}
+.form--login.isRemoved,
+.loading.isRemoved,
+.isRemoved.loading:after,
+.cameraWindow.isRemoved,
+.photoWindow.isRemoved,
+.endScreen.isRemoved {
+  display: none;
 }
 
 .cameraWindow {
