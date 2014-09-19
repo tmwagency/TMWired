@@ -46,7 +46,7 @@ var ApiController = {
 
 		var imgData = data.imgData,
 			state = data.gameState,
-			userName = data.userName;
+			userName = data.userName.toLowerCase();
 
 		var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
 
