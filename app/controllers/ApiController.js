@@ -51,15 +51,14 @@ var ApiController = {
 		var base64Data = imgData.replace(/^data:image\/\w+;base64,/, "");
 
 		//this will be replaced by the users name
-		var name = 'ash',
-			filepath = imgFolder + name + imgExt;
+		var filepath = imgFolder + name + imgExt;
 
 		require("fs").writeFile(
 			filepath,
 			base64Data,
 			'base64',
 			function(err) {
-				ApiController.Twitter.postUpdate(name, state, filepath)
+				ApiController.Twitter.postUpdate(userName, state, filepath)
 			}
 		);
 
