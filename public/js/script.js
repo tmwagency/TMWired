@@ -1,8 +1,13 @@
 var TMW = window.TMW || {};
 
 TMW.Wired = {
+
+	EXTERNAL_WEBCAM_ID : '89e0d0c17efbd5c0525e4db7b6c67e6f557d4456a82da194ebda964d2de72a57',
+
 	socket : null,
 	isConnected : false,
+
+	usernameInput : document.querySelector('.form--login .control--username'),
 
 	videoOutput : document.querySelector('video'),
 	videoWidth : 0,
@@ -12,7 +17,10 @@ TMW.Wired = {
 	photo : document.querySelector('.photo'),
 
 	userDetails : 'Guest',
+	endScreen : document.querySelector('.endScreen'),
 	gameCompleteText : document.querySelector('.stateText'),
+	retryButton : document.querySelector('.retry'),
+	resetButton : document.querySelector('.reset'),
 
 	isAnimating : false,
 	animationDelay : 500,
@@ -75,11 +83,18 @@ TMW.Wired = {
 
 
 		//testing
-		// TMW.Wired.changeView({view : 'loader'})
-		// TMW.Wired.changeView({view : 'inPlay'})
+		// TMW.Wired.changeView({view : 'loader'});
+		// TMW.Wired.changeView({view : 'inPlay'});
 		//
 		//TMW.Wired.setupPhotoDimensions();
 		//TMW.Wired.captureScreenShot();
+		//
+		//
+
+		// FAIL/SUCCESS DEBUG
+		//TMW.Wired.changeView({view : 'fail'});
+		//TMW.Wired.changeView({view : 'complete'});
+
 
 	},
 
@@ -102,7 +117,8 @@ TMW.Wired = {
 
 	changeView : function (data) {
 
-		log('script.js :: changeView', data);
+		log('script.js :: [changeView] data:', data);
+		//log('retryButton:', TMW.Wired.retryButton);
 
 		//if we’re animating something, then add our view change to a queue and recall in a second
 		if (TMW.Wired.isAnimating) {
@@ -120,9 +136,30 @@ TMW.Wired = {
 		} else {
 
 			switch (data.view) {
+				case 'initial':
+
+				log('RESETTING VIEW...');
+
+					TMW.Wired.usernameInput.value = '';
+					TMW.Wired.usernameInput.focus();
+
+					TMW.Wired.endScreen.classList.add('isHidden');
+					TMW.Wired.endScreen.classList.remove('fail');
+					TMW.Wired.endScreen.classList.remove('complete');
+
+					TMW.Wired.isAnimating = false;
+					$('.form--login').style.display = 'block';
+
+					break;
 				case 'loader':
 					$('.form--login').style.display = 'none';
+
+					TMW.Wired.endScreen.classList.add('isHidden');
+					TMW.Wired.endScreen.classList.remove('fail');
+					TMW.Wired.endScreen.classList.remove('complete');
+
 					$('.loading').classList.remove('isHidden');
+					$('.loading').classList.remove('isRemoved');
 
 					TMW.Wired.isAnimating = true;
 					TMW.Wired.setAnimationTimer();
@@ -136,6 +173,8 @@ TMW.Wired = {
 					TMW.Wired.setAnimationTimer(function () {
 						document.querySelector('.loading').classList.add('isRemoved');
 						document.querySelector('video').classList.remove('isHidden');
+						document.querySelector('video').classList.remove('isRemoved');
+						
 						TMW.Wired.setupPhotoDimensions();
 					});
 					break;
@@ -143,19 +182,51 @@ TMW.Wired = {
 					console.log('I AM COMPLETED');
 					TMW.Wired.gameCompleteText.innerHTML = 'WINNER!';
 					document.querySelector('video').classList.add('isRemoved');
-					document.querySelector('.endScreen').classList.remove('isHidden');
+					TMW.Wired.endScreen.classList.remove('isHidden');
+					TMW.Wired.endScreen.classList.add('complete');
+					TMW.Wired.activateResetButtons();
+
 					break;
 				case 'fail':
 					console.log('I AM FAILURE');
 					TMW.Wired.gameCompleteText.innerHTML = 'LOSER!';
 					document.querySelector('video').classList.add('isRemoved');
-					document.querySelector('.endScreen').classList.remove('isHidden');
+					TMW.Wired.endScreen.classList.remove('isHidden');
+					TMW.Wired.endScreen.classList.add('fail');
+					TMW.Wired.activateResetButtons();
 					break;
 			}
 
 		}
 
 
+	},
+
+	activateResetButtons : function () {
+
+		TMW.Wired.deactivateResetButtons();
+
+		TMW.Wired.retryButton.addEventListener('click', TMW.Wired.retryButtonClickHandler);
+		TMW.Wired.resetButton.addEventListener('click', TMW.Wired.resetButtonClickHandler);
+	},
+
+	deactivateResetButtons : function () {
+		TMW.Wired.retryButton.removeEventListener('click', TMW.Wired.retryButtonClickHandler);
+		TMW.Wired.resetButton.removeEventListener('click', TMW.Wired.resetButtonClickHandler);
+	},
+
+	retryButtonClickHandler : function (event) {
+		log('retry button clicked');
+
+		TMW.Wired.deactivateResetButtons();
+		TMW.Wired.socket.emit('userRetry');
+	},
+
+	resetButtonClickHandler : function (event) {
+		log('restart button clicked');
+
+		TMW.Wired.deactivateResetButtons();
+		TMW.Wired.socket.emit('userReset');
 	},
 
 
@@ -216,13 +287,15 @@ TMW.Wired = {
 			if (sourceInfo.kind === 'video') {
 				//try and match our external webcam id
 				log('script.js :: Trying to match external webcam ID...');
-				//if (sourceInfo.id.match(/89e0d0c17efbd5c0525e4db7b6c67e6f557d4456a82da194ebda964d2de72a57/)) {
+				//log('current ID:', sourceInfo.id);
+
+				if (sourceInfo.id.match(TMW.Wired.EXTERNAL_WEBCAM_ID)) {
 					log('Matched External Camera Id');
 					TMW.Wired.startStream(sourceInfo.id);
-				// }
-				// else {
-				// 	log('script.js :: Failed to match external webcam ID.');
-				// }
+				}
+				else {
+					//log('script.js :: Failed to match external webcam ID.');
+				}
 			}
 		}
 

@@ -155,12 +155,10 @@ module.exports = function (grunt) {
 	// === Tasks ===
 	// =============
 	// A task for development
-	grunt.registerTask('dev', ['uglify', 'sass:dev']);
-
 	// A task for deployment
-	grunt.registerTask('deploy', ['uglify', 'sass:kickoff']);
+	grunt.registerTask('deploy', ['uglify', 'sass:kickoff', 'autoprefixer:kickoff']);
 
 	// Default task
-	grunt.registerTask('default', ['uglify', 'sass:dev']);
+	grunt.registerTask('default', ['uglify', 'sass:kickoff', 'autoprefixer:kickoff']);
 
 };
