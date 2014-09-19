@@ -10,6 +10,8 @@ TMW.Wired = {
 	canvas : document.querySelector('.photoWindow'),
 	ctx : null,
 	photo : document.querySelector('.photo'),
+
+	userDetails : 'Guest',
 	gameCompleteText : document.querySelector('.stateText'),
 
 	isAnimating : false,
@@ -61,7 +63,7 @@ TMW.Wired = {
 
 		//do some logging on stuff here
 		$('.form--login').on('submit', function (e) {
-			var userDetails = {
+			TMW.Wired.userDetails = {
 				username : $('.control--username').value
 			};
 
@@ -81,7 +83,7 @@ TMW.Wired = {
 
 	},
 
-	userVerified : function () {
+	userVerified : function (userDetails) {
 		//simply here in case we want to do anything in between these states
 		//UI is informed of successful oauth from User
 
@@ -282,7 +284,8 @@ TMW.Wired = {
 		//emit tweet status message here
 		TMW.Wired.socket.emit('API.postUpdate', {
 			imgData : data,
-			gameState : state
+			gameState : state,
+			userName : TMW.Wired.userDetails.username
 		});
 
 	},
