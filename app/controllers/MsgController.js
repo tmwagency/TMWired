@@ -28,7 +28,7 @@ var MsgController = {
 
 		//setup our Arduino connection
 		//commented out for testing purposes
-		//_self.Arduino.setupConnection();
+		_self.Arduino.setupConnection();
 
 		return _self;
 

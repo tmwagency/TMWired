@@ -113,7 +113,7 @@ var ApiController = {
 				token_secret: _self.Twitter.keys.accessTokenSecret
 			});
 
-			var tweetStatus = this.Twitter.getStatus(state, name);
+			var tweetStatus = ApiController.Twitter.getStatus(state, name);
 
 			tuwm.post(
 				tweetStatus,
