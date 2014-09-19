@@ -77,7 +77,17 @@ var ApiController = {
 		},
 
 		tweet : {
-			status : 'I’ve been playing TMWired, I scored blah - and my name is ',
+			status : {
+				fail : [
+					'Whups, sorry {name}. Looks like you failed #IncubatorExpo. Your loved ones have been alerted to your failure.',
+					'Tough going, {name}. You have what the youth refer to as Epically Failed at SteadyHand #IncubatorExpo.',
+					'We know you said you had nerves of steel, {name}, but your performance at #IncubatorExpo says otherwise.'
+				],
+				complete : [
+					'NICE ONE {name}. You made it to the end of SteadyHand at #IncubatorExpo. Have a bit of cake.',
+					'Looks like Cool Hand {name} made it the end of SteadyHand at #IncubatorExpo. Ooh, they’re so dreamy.'
+				]
+			},
 			media : [], //This data must be either the raw image bytes or encoded as base64
 			lat : null,
 			long : null,

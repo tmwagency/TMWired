@@ -248,7 +248,7 @@ html {
 }
 
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 20px;
   font-size: 1rem;
   line-height: 1.4;
@@ -258,11 +258,15 @@ body {
           font-feature-settings: "liga","dlig";
 }
 
+.secondaryFont {
+  font-family: "Roboto Condensed", Helvetica, Arial, sans-serif;
+}
+
 /**
  * Paragraphs
  */
 p {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   font-size: 20px;
   font-size: 1rem;
   margin-top: 0;
@@ -1032,7 +1036,7 @@ input[type="button"].btn--block {
   padding: 0.5em;
   font-size: 20px;
   font-size: 1rem;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: "Roboto", sans-serif;
   line-height: 1.4;
   color: #444;
   font-weight: normal;
@@ -1785,7 +1789,7 @@ img, object, embed, video {
  * Tables
  */
 table {
-  background-color: #f1f1f1;
+  background-color: #FFFCE0;
 }
 
 th {
@@ -1828,7 +1832,7 @@ th {
   border-top: 2px solid #ddd;
 }
 .table .table {
-  background-color: #f1f1f1;
+  background-color: #FFFCE0;
 }
 
 .table--condensed > thead > tr > th,
@@ -2052,11 +2056,11 @@ pre code {
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
-  background-color: #d7d7d7;
+  background-color: #fff7ad;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #8b8b8b;
+  background: #ffe814;
   cursor: pointer;
   border-radius: 5px;
 }
@@ -2072,7 +2076,7 @@ pre code {
  * Global app/site styles
  */
 body {
-  background-color: #f1f1f1;
+  background-color: #FFFCE0;
 }
 
 /**
@@ -2092,21 +2096,37 @@ body {
 .page-header-title {
   padding: 40px;
   text-align: center;
-  background-color: #333;
+  background: #F15A24 url("/img/tmw_wired.svg") no-repeat center 60px;
+  background-size: auto 150px;
+  border-bottom: 35px solid #CE3D11;
   color: #fff;
+  text-transform: uppercase;
+  font-size: 0px;
+  font-size: 0rem;
+  height: 280px;
+}
+
+.page-header-subtitle {
+  display: block;
+  text-transform: none;
 }
 
 .page-content {
   text-align: center;
 }
 
+.control--username {
+  margin-top: 10px;
+}
+
 .page-footer {
   position: fixed;
   width: 100%;
   padding: 10px 10%;
-  background: #333;
+  background: #CE3D11;
   bottom: 0;
   left: 0;
+  height: 35px;
 }
 
 .page-footer-links > li {
