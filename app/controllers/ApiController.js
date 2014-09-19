@@ -106,15 +106,14 @@ var ApiController = {
 		//post my update to twitter
 		postUpdate : function (name, state, filepath) {
 
-			var tweet = _self.Twitter.tweet,
-				tweetStatus = tweet.status + name + state;
-
 			var tuwm = new twitter_update_with_media({
 				consumer_key: _self.Twitter.keys.consumerKey,
 			    consumer_secret: _self.Twitter.keys.consumerSecret,
 				token: _self.Twitter.keys.accessToken,
 				token_secret: _self.Twitter.keys.accessTokenSecret
 			});
+
+			var tweetStatus = this.Twitter.getStatus(state, name);
 
 			tuwm.post(
 				tweetStatus,
@@ -127,6 +126,23 @@ var ApiController = {
 				}
 			);
 
+		},
+
+		getStatus : function (state, name) {
+
+			var random;
+
+			if (state === 'fail') {
+				random = Math.floor(Math.random() * 3);
+			} else if (state === 'complete'){
+				random = Math.floor(Math.random() * 2);
+			}
+
+			var tweet = _self.Twitter.tweet.status[state][random];
+			tweet = tweet.replace('{name}', '@' + name)
+
+			console.log('getStatus :: ', state, random, tweet);
+			return tweet;
 		}
 	}
 }
