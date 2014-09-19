@@ -184,7 +184,7 @@ var MsgController = {
 
 		}
 	}
-}
+};
 
 var _self = MsgController;
 

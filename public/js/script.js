@@ -10,6 +10,7 @@ TMW.Wired = {
 	canvas : document.querySelector('.photoWindow'),
 	ctx : null,
 	photo : document.querySelector('.photo'),
+	gameCompleteText : document.querySelector('.stateText'),
 
 	isAnimating : false,
 	animationDelay : 500,
@@ -138,13 +139,13 @@ TMW.Wired = {
 					break;
 				case 'complete':
 					console.log('I AM COMPLETED');
-					document.querySelector('.stateText').innerHTML = 'I AM A SUCCESS';
+					TMW.Wired.gameCompleteText.innerHTML = 'WINNER!';
 					document.querySelector('video').classList.add('isRemoved');
 					document.querySelector('.endScreen').classList.remove('isHidden');
 					break;
 				case 'fail':
 					console.log('I AM FAILURE');
-					document.querySelector('.stateText').innerHTML = 'I AM A FAILURE';
+					TMW.Wired.gameCompleteText.innerHTML = 'LOSER!';
 					document.querySelector('video').classList.add('isRemoved');
 					document.querySelector('.endScreen').classList.remove('isHidden');
 					break;
