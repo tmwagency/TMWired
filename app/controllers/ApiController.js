@@ -68,11 +68,17 @@ var ApiController = {
 
 		//should really move into config if have time later
 		keys : {
-			consumerKey : 'xClEq3PngrJQNvfhbDSaAqfTv',
-			consumerSecret : 'CCjtwzGN3huielmdYFoylxooWkfS76NO9QivLcjS0SWu1v2SWo',
+			// consumerKey : 'MEIijS3323F82pv9NVZjGhywJ',
+			// consumerSecret : 'milsMvTUjAiRdJ77Hzj1oucp31MSqROGutSmc1wIYITbVc7Kp4',
 
-			accessToken : '2457920262-duT0pTW1lP7oyi6c5L4mWprsZQNF4SDiDiQ5LIs',
-			accessTokenSecret : 'VFrKmso3izXk4DZmR2rZAOlt5lglXwPbYtEkdjyhiTMVp'
+			// accessToken : '2653464061-WsgpR2Vcb4mUF69vmY3IxV7FRySq1ODbF29va6M',
+			// accessTokenSecret : 'IF7Q4W02MwfPPYHox398WSh5Ee5PLrIpJIgGGWs4QCPL7'
+
+			consumerKey : 'A8Gj7WmIriOoqUihv2T97zNbS',
+			consumerSecret : 'kAR9yV2rmOfN4nGc1n29dgJE7ZNPtbsRJtOFUGJpn395m16iUw',
+
+			accessToken : '2829524809-mWQFZojArsYewqJGVzGH4LMBskBpRfXP1tbnzCN',
+			accessTokenSecret : 'aPv6HaG5zil5DZEwHkTOBZsTQPPiIDHHCvKmgrCQk4RLh'
 		},
 
 		tweet : {

@@ -2082,6 +2082,16 @@ body {
   font-size: 0px;
   font-size: 0rem;
   height: 280px;
+  margin-bottom: 40px;
+  transition: 1000ms;
+}
+.inPlay .page-header-title {
+  background: #F15A24 url("/img/tmw_wired.svg") no-repeat center 30px;
+  background-size: auto 90px;
+  padding: 10px;
+  height: 150px;
+  margin-bottom: 0;
+  border-bottom: 15px solid #CE3D11;
 }
 
 .page-header-subtitle {
@@ -2105,6 +2115,9 @@ body {
   bottom: 0;
   left: 0;
   height: 35px;
+}
+.inPlay .page-footer {
+  height: 15px;
 }
 
 .page-footer-links > li {
@@ -2138,7 +2151,11 @@ body {
 /**
  * Loader animation
  */
-.loading, .loading:after {
+.loading p {
+  margin-top: 20px;
+}
+
+.loader, .loader:after {
   margin: 0 auto;
   position: relative;
   display: inline-block;
@@ -2152,30 +2169,33 @@ body {
   border-radius: 50%;
   animation: spin 1s infinite linear;
 }
-.loading:after {
+.loader:after {
   content: '';
   animation: spinreverse 1s infinite linear;
 }
 
 .form--login,
+.loader,
+.loader:after,
 .loading,
-.loading:after,
 .cameraWindow,
 .photoWindow,
 .endScreen {
   transition: opacity 500ms, margin-left 0 500ms;
 }
 .form--login.isHidden,
+.loader.isHidden,
+.isHidden.loader:after,
 .loading.isHidden,
-.isHidden.loading:after,
 .cameraWindow.isHidden,
 .photoWindow.isHidden,
 .endScreen.isHidden {
   opacity: 0;
 }
 .form--login.isRemoved,
+.loader.isRemoved,
+.isRemoved.loader:after,
 .loading.isRemoved,
-.isRemoved.loading:after,
 .cameraWindow.isRemoved,
 .photoWindow.isRemoved,
 .endScreen.isRemoved {

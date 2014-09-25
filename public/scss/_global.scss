@@ -33,6 +33,18 @@ body {
 
 	@include font-size(0);
 	height: 280px;
+	margin-bottom: 40px;
+
+	transition: 1000ms;
+
+	.inPlay & {
+		background: #F15A24 url('#{$img-path}/tmw_wired.svg') no-repeat center 30px;
+		background-size: auto 90px;
+		padding: 10px;
+		height: 150px;
+		margin-bottom: 0;
+		border-bottom: 15px solid $red-dark;
+	}
 }
 	.page-header-subtitle {
 		display: block;
@@ -55,6 +67,10 @@ body {
 	bottom: 0;
 	left: 0;
 	height: 35px;
+
+	.inPlay & {
+		height: 15px;
+	}
 }
 	.page-footer-links {
 		> li {
@@ -101,6 +117,13 @@ $size: 1em;
 $color: #c22;
 
 .loading {
+
+	& p {
+		margin-top: 20px;
+	}
+}
+
+.loader {
 	margin: 0 auto;
 	position: relative;
 	display: inline-block;
@@ -118,12 +141,13 @@ $color: #c22;
 
 	&:after {
 	  content: '';
-	  @extend .loading;
+	  @extend .loader;
 	  animation: spinreverse 1s infinite linear;
 	}
 }
 
 .form--login,
+.loader,
 .loading,
 .cameraWindow,
 .photoWindow,

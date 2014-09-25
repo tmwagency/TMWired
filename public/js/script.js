@@ -144,6 +144,7 @@ TMW.Wired = {
 
 					TMW.Wired.usernameInput.value = '';
 
+					document.querySelector('body').classList.remove('inPlay');
 					TMW.Wired.endScreen.classList.add('isHidden');
 					TMW.Wired.endScreen.classList.remove('fail');
 					TMW.Wired.endScreen.classList.remove('complete');
@@ -157,6 +158,7 @@ TMW.Wired = {
 				case 'loader':
 					$('.form--login').style.display = 'none';
 
+					document.querySelector('body').classList.remove('inPlay');
 					TMW.Wired.endScreen.classList.add('isHidden');
 					TMW.Wired.endScreen.classList.remove('fail');
 					TMW.Wired.endScreen.classList.remove('complete');
@@ -170,6 +172,7 @@ TMW.Wired = {
 					
 				case 'inPlay':
 					document.querySelector('.loading').classList.add('isHidden');
+					document.querySelector('body').classList.add('inPlay');
 
 					TMW.Wired.isAnimating = true;
 
